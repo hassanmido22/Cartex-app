@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gp_login_screen/Class/exceptions.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Models/user.dart';
 import 'package:http/http.dart' as http;
@@ -49,36 +52,57 @@ read() async {
   return value;
 }
 
-Future<List<Product>> listSelectedProducts(int barcode) async {
+Future<Product> listSelectedProducts(int barcode) async {
     final url = "http://127.0.0.1:8000/products/products-list?barcode=$barcode";
     var response = await http.get(url,headers: {
       "branch":"MAADY_BRANCH"
     });
-    
-    var jsonData = json.decode(response.body);
-
-    List<Product> list = productFromJson(response.body);
-    print(list.length);
-    /*if (response.statusCode == 200) {
-      return productFromJson(response.body);
-    } else {
-      return json.decode(response.body);
-    }*/
-  }
-
-  Future<List<Product>> listProducts() async {
-    final url = "http://127.0.0.1:8000/products/products-list/";
-    var response = await http.get(url,headers: {
+    var responseJson;
+    try{
+      final response = await http.get(url,headers: {
       "branch":"MAADY_BRANCH"
     });
-    print(response.body);
-    if (response.statusCode == 200) {
-      return productFromJson(response.body);
-    } else {
-      return json.decode(response.body);
+      responseJson = _returnResponse(response);
+    } on SocketException{
+      throw FetchDataException('No Internet connection');
     }
+    List<Product> x = productFromJson(responseJson);
+    return x.last;
   }
 
+  
+/*
+  Future<List<Product>> listProducts() async {
+    final url = "http://127.0.0.1:8000/products/products-list/";
+    var responseJson;
+    try{
+      final response = await http.get(url,headers: {
+      "branch":"MAADY_BRANCH"
+    });
+      responseJson = _returnResponse(response);
+    } on SocketException{
+      throw FetchDataException('No Internet connection');
+    }
+    return responseJson;
+  }
+*/
+
+dynamic _returnResponse(http.Response response) {
+  switch (response.statusCode) {
+    case 200:
+      return response.body;
+    case 400:
+      throw BadRequestException(response.body.toString());
+    case 401:
+    case 403:
+      throw UnauthorisedException(response.body.toString());
+    case 500:
+    default:
+      throw FetchDataException(
+          'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+  }
+  }
+  
 /*
 dynamic _returnResponse(http.Response response) {
   switch (response.statusCode) {

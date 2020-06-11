@@ -1,20 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Models/product_item.dart';
+import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
 
-class SingleProduct extends StatefulWidget {
-  @override
-  _SingleProductState createState() => _SingleProductState();
-}
+class SingleProduct extends StatelessWidget {
+  final int id;
 
-class _SingleProductState extends State<SingleProduct> {
+  const SingleProduct({Key key, this.id}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, //Color.fromRGBO(238, 238, 255, 1),
       appBar: AppBar(
-        title: Text("My Cart"),
+        title: Text("Scan result"),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -23,6 +24,7 @@ class _SingleProductState extends State<SingleProduct> {
               color: Color.fromRGBO(91, 87, 148, 1),
             ),
             onPressed: () {
+              Navigator.pop(context);
               // do something
             },
           )
@@ -33,8 +35,19 @@ class _SingleProductState extends State<SingleProduct> {
         ),
       ),
       body: Container(
-        child: SingleProductWidget()
-      ),
+          child: FutureBuilder<Product>(
+        future: listSelectedProducts(id),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Product product = snapshot.data;
+            return SingleProductWidget(
+              product: product,
+            );
+          } else {
+            return new CircularProgressIndicator();
+          }
+        },
+      )),
       bottomNavigationBar: BottomAppBar(
           elevation: 1,
           child: Container(

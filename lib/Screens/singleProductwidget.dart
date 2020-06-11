@@ -1,16 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Models/product_item.dart';
 
 class SingleProductWidget extends StatefulWidget {
+  final Product product;
+
+  const SingleProductWidget({Key key, this.product}) : super(key: key);
+
   @override
   _SingleProductWidgetState createState() => _SingleProductWidgetState();
 }
 
 class _SingleProductWidgetState extends State<SingleProductWidget> {
+  List<Feature> x;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    x = widget.product.feature;
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     MediaQueryData m = MediaQuery.of(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -20,26 +33,26 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
           child: Column(
             children: <Widget>[
               /*Container(
-                    width: 70,
-                    height: 7,
-                    margin: EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(216, 216, 216, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    child: Text(
-                      "Product Details",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(72, 67, 92, 1)),
-                    ),
-                  ),
-                  Divider(
-                    height: 50,
-                  ),*/
+                        width: 70,
+                        height: 7,
+                        margin: EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(216, 216, 216, 1),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 15),
+                        child: Text(
+                          "Product Details",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color.fromRGBO(72, 67, 92, 1)),
+                        ),
+                      ),
+                      Divider(
+                        height: 50,
+                      ),*/
               Stack(
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
@@ -62,8 +75,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                     child: Container(
                       height: ((m.size.width - 40) * 160) / (338) - 20,
                       child: CachedNetworkImage(
-                        imageUrl:
-                            'https://cf3.s3.souqcdn.com/item/2017/07/11/23/36/85/16/item_XXL_23368516_33269487.jpg',
+                        imageUrl: widget.product.image,
                         imageBuilder: (context, imageProvider) => Container(
                           padding: EdgeInsets.only(top: 15, bottom: 15),
                           decoration: BoxDecoration(
@@ -91,7 +103,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                "Accessories",
+                widget.product.category,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -102,7 +114,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                 height: 10,
               ),
               Text(
-                "Watch Gold premium x100",
+                widget.product.name,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -113,7 +125,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                 height: 10,
               ),
               Text(
-                '\$2465.99 LE',
+                '\$${widget.product.price} LE',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -135,13 +147,27 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                 height: 10,
               ),
               Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy  text ever since  the 1500s",
+                widget.product.description,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: Color.fromRGBO(112, 112, 112, 1),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              (widget.product.feature != null)
+                  ? Container(
+                      child: ListView.builder(
+                          itemCount: widget.product.feature.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Text(widget.product.feature
+                                .elementAt(index)
+                                .featurename);
+                          }),
+                    )
+                  : Text("data")
             ],
           ),
         )

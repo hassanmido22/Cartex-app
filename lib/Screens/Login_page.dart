@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/user.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
+import 'package:gp_login_screen/Screens/Register.dart';
 import 'package:gp_login_screen/Screens/Register_4.dart';
 import 'package:gp_login_screen/Screens/action.dart';
 
@@ -126,8 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (_form.currentState.validate()) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => Home()),
+                          MaterialPageRoute(builder: (context) => Home()),
                         );
                       }
                     },
@@ -203,7 +203,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/register');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Registration()),
+                          );
                         },
                       ),
                     ),
