@@ -61,7 +61,7 @@ class Getstarted2 extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "Get Started",
+                        "Let's get Started",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
