@@ -52,11 +52,9 @@ read() async {
   return value;
 }
 
+
 Future<Product> listSelectedProducts(int barcode) async {
     final url = "http://127.0.0.1:8000/products/products-list?barcode=$barcode";
-    var response = await http.get(url,headers: {
-      "branch":"MAADY_BRANCH"
-    });
     var responseJson;
     try{
       final response = await http.get(url,headers: {

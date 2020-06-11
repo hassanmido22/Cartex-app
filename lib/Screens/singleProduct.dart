@@ -34,20 +34,22 @@ class SingleProduct extends StatelessWidget {
           onPressed: () {},
         ),
       ),
-      body: Container(
-          child: FutureBuilder<Product>(
-        future: listSelectedProducts(id),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Product product = snapshot.data;
-            return SingleProductWidget(
-              product: product,
-            );
-          } else {
-            return new CircularProgressIndicator();
-          }
-        },
-      )),
+      body: SingleChildScrollView(
+              child: Container(
+            child: FutureBuilder<Product>(
+          future: listSelectedProducts(id),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Product product = snapshot.data;
+              return SingleProductWidget(
+                product: product,
+              );
+            } else {
+              return new CircularProgressIndicator();
+            }
+          },
+        )),
+      ),
       bottomNavigationBar: BottomAppBar(
           elevation: 1,
           child: Container(

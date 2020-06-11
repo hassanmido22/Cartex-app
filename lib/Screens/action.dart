@@ -94,12 +94,10 @@ class Home extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    listSelectedProducts(1111110011);
-                    /*
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Scanner()),
-                    );*/
+                    );
                   },
                   child: Container(
                     child: Text(
