@@ -9,5 +9,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> get listFeatures {
+    return [...features];
+  }
 
 }

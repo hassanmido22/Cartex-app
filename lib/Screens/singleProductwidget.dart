@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
+import 'package:gp_login_screen/Providers/cartProvider.dart';
+import 'package:provider/provider.dart';
 
 class SingleProductWidget extends StatefulWidget {
   final Product product;
@@ -20,18 +22,22 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*
-    featuresList.asMap().entries.map((entry){
-      int index = entry.key;
-      featuresList.add(widget.product.feature.elementAt(index).values.elementAt(0));
-    });*/
 
-    /*widget.product.feature.map((entry){
-      print(12);
-      //print(entry.values.elementAt(0).values);
-    });*/
     widget.product.feature
         .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
+
+}
+
+ @override
+  void didChangeDependencies() {
+    final cartProvider = Provider.of<CartProvider>(context);
+
+    /*widget.product.feature
+        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
+*/
+    cartProvider.addFeatures(featuresList);
+    super.didChangeDependencies();
+
   }
 
   @override

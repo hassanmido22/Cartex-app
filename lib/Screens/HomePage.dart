@@ -95,9 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData m = MediaQuery.of(context);
-    return ChangeNotifierProvider(
-        create: (ctx) => CartProvider(),
-        child: Scaffold(
+    return Scaffold(
           backgroundColor: Color.fromRGBO(238, 238, 255, 1),
           appBar: AppBar(
             title: Text(widget.title),
@@ -479,6 +477,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ), // This trailing comma makes auto-formatting nicer for build methods.
-        ));
+        );
   }
 }
