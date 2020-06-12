@@ -1,19 +1,22 @@
 import 'dart:async';
 
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gp_login_screen/Models/cart.dart';
 import 'package:gp_login_screen/Screens/barcode_test.dart';
 import 'package:gp_login_screen/Screens/bottom_slider.dart';
 import 'package:gp_login_screen/Screens/cart.dart';
 import 'package:gp_login_screen/Screens/checkout.dart';
 import 'package:gp_login_screen/Screens/payment.dart';
+import 'package:gp_login_screen/Screens/singleProduct.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
-
+  
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -22,6 +25,45 @@ class _MyHomePageState extends State<MyHomePage> {
   String timer = "00:00:00";
   var swatch = Stopwatch();
   final dur = const Duration(seconds: 1);
+  ScanResult scanResult;
+
+  Future scan() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel":"cancel",
+          "flash_on": "Flast on",
+          "flash_off": "fLash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+
+      setState(() => scanResult = result);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                SingleProduct(id: result.rawContent)),
+      );
+    } on PlatformException catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      setState(() {
+        scanResult = result;
+      });
+    }
+  }
 
   void startTimer() {
     Timer(dur, keepRunning);
@@ -266,10 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(25),
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BarcodeTest(),
-                        ));
+                        scan();
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
