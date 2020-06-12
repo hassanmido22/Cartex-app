@@ -51,7 +51,10 @@ class Getstarted2 extends StatelessWidget {
                     height: 51,
                     child: FlatButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/login');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
                       },
                       color: Colors.transparent,
                       shape: RoundedRectangleBorder(
@@ -77,7 +80,9 @@ class Getstarted2 extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
                       );
                     },
                     child: Text(

@@ -11,6 +11,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<User> addUser({Map body}) async {
+  print("object");
+
+  print(body);
   final url = "http://127.0.0.1:8000/registration/";
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
@@ -20,6 +23,9 @@ Future<User> addUser({Map body}) async {
       return User.fromJson(json.decode(response.body));
     }
     print(response.body);
+    var jsonData = json.decode(response.body);
+
+    _save(jsonData['key']);
     return User.fromJson(json.decode(response.body));
   });
 }
@@ -71,14 +77,16 @@ Future<Product> listSelectedProducts(String barcode) async {
 Future<User> getUser() async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
+  print(token);
   final url = "http://127.0.0.1:8000/user/current/";
-  return await http.get(url, headers: {"Authorization": "Token $token"}).then(
+  return await http.get(url, headers: {"Authorization": "$token"}).then(
       (http.Response response) {
     final data = json.decode(response.body);
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while fetching data");
     }
+    print(response.body);
     return User.fromJson(data);
   });
 }
