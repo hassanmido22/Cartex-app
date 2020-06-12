@@ -8,6 +8,7 @@ import 'package:gp_login_screen/Screens/bottom_slider.dart';
 import 'package:gp_login_screen/Screens/cart.dart';
 import 'package:gp_login_screen/Screens/checkout.dart';
 import 'package:gp_login_screen/Screens/payment.dart';
+import 'package:gp_login_screen/Screens/profile.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -160,8 +161,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(color: Color.fromRGBO(132, 132, 132, 1)),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
-                },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profile()),
+                  );
+                },  
               ),
               Card(
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -267,9 +271,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BarcodeTest(),
-                        ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BarcodeTest(),
+                            ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -313,9 +318,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CartList(),
-                        ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CartList(),
+                            ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -400,9 +406,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Check(),
-                        ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Check(),
+                            ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
