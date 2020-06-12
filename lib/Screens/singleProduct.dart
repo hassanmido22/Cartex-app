@@ -6,7 +6,7 @@ import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
 
 class SingleProduct extends StatelessWidget {
-  final String id;
+  final int id;
 
   const SingleProduct({Key key, this.id}) : super(key: key);
 
@@ -41,7 +41,6 @@ class SingleProduct extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Product product = snapshot.data;
-              
               return SingleProductWidget(
                 product: product,
               );
