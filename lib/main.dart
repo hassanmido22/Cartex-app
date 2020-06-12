@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:gp_login_screen/Screens/HomePage.dart';
 import 'package:gp_login_screen/Screens/Login_page.dart';
 import 'package:gp_login_screen/Screens/Register.dart';
 import 'package:gp_login_screen/Screens/Register_1.dart';
 import 'package:gp_login_screen/Screens/action.dart';
 import 'package:gp_login_screen/Screens/spalsh_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //void main() => runApp(MyApp());
@@ -26,13 +28,15 @@ Map<int, Color> color = {
 
 MaterialColor m = MaterialColor(0xFFFFFFFF, color);
 
-void main() => runApp(new MaterialApp(
+void main() => runApp(ChangeNotifierProvider(
+        create: (ctx) => CartProvider(),
+        child: new MaterialApp(
       home: MyApp(),
       theme: ThemeData(
         primarySwatch: m,
       ),
       debugShowCheckedModeBanner: false,
-    ));
+    )));
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.

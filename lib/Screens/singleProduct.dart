@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
+import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
+import 'package:provider/provider.dart';
 
 class SingleProduct extends StatelessWidget {
   final String id;
@@ -12,6 +14,9 @@ class SingleProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   final cartdata = Provider.of<CartProvider>(context);
+   final featuresData = cartdata.listFeatures;
+
     return Scaffold(
       backgroundColor: Colors.white, //Color.fromRGBO(238, 238, 255, 1),
       appBar: AppBar(
@@ -77,7 +82,9 @@ class SingleProduct extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25)),
                         color: Color.fromRGBO(238, 76, 125, 1),
-                        onPressed: () {},
+                        onPressed: () {
+                          print(featuresData);
+                        },
                         child: Text(
                           "Add to cart",
                           style: TextStyle(
