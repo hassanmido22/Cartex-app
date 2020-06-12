@@ -14,13 +14,28 @@ class SingleProductWidget extends StatefulWidget {
 }
 
 class _SingleProductWidgetState extends State<SingleProductWidget> {
-  List<Feature> x;
+  List featuresList = [] ;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    x = widget.product.feature;
+    /*
+    featuresList.asMap().entries.map((entry){
+      int index = entry.key;
+      featuresList.add(widget.product.feature.elementAt(index).values.elementAt(0));
+    });*/
+
+    /*widget.product.feature.map((entry){
+      print(12);
+      //print(entry.values.elementAt(0).values);
+    });*/
+    widget.product.feature.forEach((f)=>{
+      print(2)
+    });
+    print("object");
+    print(featuresList);
+
   }
 
   @override
@@ -163,8 +178,8 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                 SizedBox(
                   height: 10,
                 ),
-                (widget.product.feature.length == 0) ?Text("data") : Text("2")
-                /*
+                (widget.product.feature.length == 0) ?Text("data") : 
+                
                 Container(
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -209,7 +224,9 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                                             right: 10,
                                             top: 0,
                                             bottom: 0),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          
+                                        },
                                         child: Text(widget.product.feature
                                             .elementAt(i)
                                             .values
@@ -224,7 +241,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                           ),
                         );
                       }),
-                )*/
+                )
               ],
             ),
           )

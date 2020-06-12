@@ -26,7 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String timer = "00:00:00";
   var swatch = Stopwatch();
   final dur = const Duration(seconds: 1);
-  ScanResult scanResult;
 
   Future scan() async {
     try {
@@ -40,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       var result = await BarcodeScanner.scan(options: options);
 
-      setState(() => scanResult = result);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -59,9 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
       } else {
         result.rawContent = 'Unknown error: $e';
       }
-      setState(() {
-        scanResult = result;
-      });
+      print(result);
+      
     }
   }
 

@@ -59,7 +59,7 @@ Future<Product> listSelectedProducts(String barcode) async {
   var responseJson;
   try {
     final response = await http.get(url, headers: {"branch": "MAADY_BRANCH"});
-    print(response.body);
+    //print(response.body);
     responseJson = _returnResponse(response);
   } on SocketException {
     throw FetchDataException('No Internet connection');

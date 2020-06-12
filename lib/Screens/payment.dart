@@ -217,7 +217,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Expanded(
+                  Expanded( 
                     flex: 3,
                     child: Container(
                       //width: m.size.width * 94 / 320,
