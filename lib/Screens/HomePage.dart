@@ -10,13 +10,14 @@ import 'package:gp_login_screen/Screens/bottom_slider.dart';
 import 'package:gp_login_screen/Screens/cart.dart';
 import 'package:gp_login_screen/Screens/checkout.dart';
 import 'package:gp_login_screen/Screens/payment.dart';
+import 'package:gp_login_screen/Screens/profile.dart';
 import 'package:gp_login_screen/Screens/singleProduct.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
-  
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       var options = ScanOptions(
         strings: {
-          "cancel":"cancel",
+          "cancel": "cancel",
           "flash_on": "Flast on",
           "flash_off": "fLash off",
         },
@@ -43,8 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                SingleProduct(id: result.rawContent)),
+            builder: (context) => SingleProduct(id: result.rawContent)),
       );
     } on PlatformException catch (e) {
       var result = ScanResult(
@@ -202,7 +202,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(color: Color.fromRGBO(132, 132, 132, 1)),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profile()),
+                  );
                 },
               ),
               Card(
@@ -352,9 +355,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CartList(),
-                        ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CartList(),
+                            ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -439,9 +443,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Check(),
-                        ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Check(),
+                            ));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
