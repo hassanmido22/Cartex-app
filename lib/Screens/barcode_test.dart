@@ -98,7 +98,7 @@ class _BarcodeTestState extends State<BarcodeTest> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                SingleProduct(id: int.parse(result.rawContent))),
+                SingleProduct(id: result.rawContent)),
       );
     } on PlatformException catch (e) {
       var result = ScanResult(
