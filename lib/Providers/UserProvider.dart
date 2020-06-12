@@ -34,7 +34,9 @@ Future<String> signIn({Map body}) async {
     return "null";
   } else {
     Map<String, dynamic> jsonn = json.decode(response.body);
-    return jsonn.containsKey("non_field_errors") ? json.decode(response.body)["non_field_errors"][0] : "null";
+    return jsonn.containsKey("non_field_errors")
+        ? json.decode(response.body)["non_field_errors"][0]
+        : "null";
   }
 }
 
@@ -52,23 +54,35 @@ read() async {
   return value;
 }
 
-
-Future<Product> listSelectedProducts(int barcode) async {
-    final url = "http://127.0.0.1:8000/products/products-list?barcode=$barcode";
-    var responseJson;
-    try{
-      final response = await http.get(url,headers: {
-      "branch":"MAADY_BRANCH"
-    });
-      responseJson = _returnResponse(response);
-    } on SocketException{
-      throw FetchDataException('No Internet connection');
-    }
-    List<Product> x = productFromJson(responseJson);
-    return x.last;
+Future<Product> listSelectedProducts(String barcode) async {
+  final url = "http://127.0.0.1:8000/products/products-list/?barcode=$barcode";
+  var responseJson;
+  try {
+    final response = await http.get(url, headers: {"branch": "MAADY_BRANCH"});
+    print(response.body);
+    responseJson = _returnResponse(response);
+  } on SocketException {
+    throw FetchDataException('No Internet connection');
   }
+  List<Product> x = productFromJson(responseJson);
+  return x.last;
+}
 
-  
+Future<User> getUser() async {
+  final sp = await SharedPreferences.getInstance();
+  String token = sp.getString('token');
+  final url = "http://127.0.0.1:8000/user/current/";
+  return await http.get(url, headers: {"Authorization": "Token $token"}).then(
+      (http.Response response) {
+    final data = json.decode(response.body);
+    final int statusCode = response.statusCode;
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while fetching data");
+    }
+    return User.fromJson(data);
+  });
+}
+
 /*
   Future<List<Product>> listProducts() async {
     final url = "http://127.0.0.1:8000/products/products-list/";
@@ -99,8 +113,8 @@ dynamic _returnResponse(http.Response response) {
       throw FetchDataException(
           'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
   }
-  }
-  
+}
+
 /*
 dynamic _returnResponse(http.Response response) {
   switch (response.statusCode) {
