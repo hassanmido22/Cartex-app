@@ -14,7 +14,7 @@ class SingleProductWidget extends StatefulWidget {
 }
 
 class _SingleProductWidgetState extends State<SingleProductWidget> {
-  List featuresList = [] ;
+  List<String> featuresList = [];
 
   @override
   void initState() {
@@ -30,12 +30,8 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
       print(12);
       //print(entry.values.elementAt(0).values);
     });*/
-    widget.product.feature.forEach((f)=>{
-      print(2)
-    });
-    print("object");
-    print(featuresList);
-
+    widget.product.feature
+        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
   }
 
   @override
@@ -178,70 +174,84 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                 SizedBox(
                   height: 10,
                 ),
-                (widget.product.feature.length == 0) ?Text("data") : 
-                
-                Container(
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: widget.product.feature.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        return Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                widget.product.feature.elementAt(i).featurename,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromRGBO(112, 112, 112, 1),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 5, bottom: 5),
-                                child: GridView.builder(
-                                  padding: EdgeInsets.all(5),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 5,
-                                          childAspectRatio: 1.4),
-                                  shrinkWrap: true,
-                                  itemCount: widget.product.feature
-                                      .elementAt(i)
-                                      .values
-                                      .length,
-                                  itemBuilder: (BuildContext context, int y) {
-                                    return Container(
-                                      margin: EdgeInsets.only(
-                                          left: 5, right: 5, top: 5, bottom: 5),
-                                      child: RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        padding: EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            top: 0,
-                                            bottom: 0),
-                                        onPressed: () {
-                                          
-                                        },
-                                        child: Text(widget.product.feature
+                (widget.product.feature.length == 0)
+                    ? Text("data")
+                    : Container(
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: widget.product.feature.length,
+                            itemBuilder: (BuildContext context, int i) {
+                              return Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      widget.product.feature
+                                          .elementAt(i)
+                                          .featurename,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromRGBO(112, 112, 112, 1),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 5),
+                                      child: GridView.builder(
+                                        padding: EdgeInsets.all(5),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 5,
+                                                childAspectRatio: 1.4),
+                                        shrinkWrap: true,
+                                        itemCount: widget.product.feature
                                             .elementAt(i)
                                             .values
-                                            .elementAt(y)
-                                            .values),
+                                            .length,
+                                        itemBuilder:
+                                            (BuildContext context, int y) {
+                                          return Container(
+                                            margin: EdgeInsets.only(
+                                                left: 5,
+                                                right: 5,
+                                                top: 5,
+                                                bottom: 5),
+                                            child: RaisedButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              padding: EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                  top: 0,
+                                                  bottom: 0),
+                                              onPressed: () {
+                                                featuresList[i] = widget
+                                                    .product.feature
+                                                    .elementAt(i)
+                                                    .values
+                                                    .elementAt(y)
+                                                    .values;
+                                                print(featuresList);
+                                              },
+                                              child: Text(widget.product.feature
+                                                  .elementAt(i)
+                                                  .values
+                                                  .elementAt(y)
+                                                  .values),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                )
+                              );
+                            }),
+                      )
               ],
             ),
           )
