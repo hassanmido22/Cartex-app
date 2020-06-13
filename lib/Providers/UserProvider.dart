@@ -18,11 +18,10 @@ Future<UserRegisterationModel> addUser({Map body}) async {
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode >= 400 || json == null) {
-      print(response.body);
       return UserRegisterationModel.fromJson(json.decode(response.body));
     }
     var jsonData = json.decode(response.body);
-
+    print(response.body);
     _save(jsonData['key']);
     return UserRegisterationModel.fromJson(json.decode(response.body));
   });
@@ -125,6 +124,7 @@ Future<UserProfileModel> getUser() async {
   return await http.get(url, headers: {"Authorization": "$token"}).then(
       (http.Response response) {
     final data = json.decode(response.body);
+    print(response.body);
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while fetching data");
