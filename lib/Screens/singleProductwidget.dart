@@ -23,25 +23,18 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
     // TODO: implement initState
     super.initState();
 
-    widget.product.feature
-        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
-
-}
-
- @override
-  void didChangeDependencies() {
-    final cartProvider = Provider.of<CartProvider>(context);
-
     /*widget.product.feature
         .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
 */
-    cartProvider.addFeatures(featuresList);
-    super.didChangeDependencies();
-
+    widget.product.feature
+        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
   }
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    cartProvider.addFeatures(featuresList);
+
     MediaQueryData m = MediaQuery.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -235,13 +228,14 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                                                   top: 0,
                                                   bottom: 0),
                                               onPressed: () {
-                                                featuresList[i] = widget
-                                                    .product.feature
-                                                    .elementAt(i)
-                                                    .values
-                                                    .elementAt(y)
-                                                    .values;
-                                                print(featuresList);
+                                                  featuresList[i] = widget
+                                                      .product.feature
+                                                      .elementAt(i)
+                                                      .values
+                                                      .elementAt(y)
+                                                      .values;
+                                                cartProvider
+                                                    .addFeatures(featuresList);
                                               },
                                               child: Text(widget.product.feature
                                                   .elementAt(i)

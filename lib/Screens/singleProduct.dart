@@ -7,16 +7,20 @@ import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
 import 'package:provider/provider.dart';
 
-class SingleProduct extends StatelessWidget {
+class SingleProduct extends StatefulWidget {
   final String id;
 
   const SingleProduct({Key key, this.id}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-   final cartdata = Provider.of<CartProvider>(context);
-   final featuresData = cartdata.listFeatures;
+  _SingleProductState createState() => _SingleProductState();
+}
 
+class _SingleProductState extends State<SingleProduct> {
+  int productId;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, //Color.fromRGBO(238, 238, 255, 1),
       appBar: AppBar(
@@ -40,13 +44,13 @@ class SingleProduct extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-              child: Container(
+        child: Container(
             child: FutureBuilder<Product>(
-          future: listSelectedProducts(id),
+          future: listSelectedProducts(widget.id),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Product product = snapshot.data;
-              
+              productId = product.id;
               return SingleProductWidget(
                 product: product,
               );
@@ -83,7 +87,11 @@ class SingleProduct extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25)),
                         color: Color.fromRGBO(238, 76, 125, 1),
                         onPressed: () {
-                          print(featuresData);
+                          final cartdata = Provider.of<CartProvider>(context);
+                          List<String> featuresData = cartdata.listFeatures;
+                          //print(featuresData);
+                          //print(productId);
+                          addToCart(widget.id, featuresData);
                         },
                         child: Text(
                           "Add to cart",
