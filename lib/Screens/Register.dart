@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Models/RegisterationModel.dart';
 import 'package:gp_login_screen/Models/user.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Screens/Register_2.dart';
@@ -255,7 +256,7 @@ class _RegistrationState extends State<Registration> {
                             ),
                           ),
                           onPressed: () async {
-                            User user = new User(
+                            UserRegisterationModel user = new UserRegisterationModel(
                                 username: nameTextField.text,
                                 email: emailTextController.text,
                                 password1: passwordTextController.text,
@@ -263,8 +264,11 @@ class _RegistrationState extends State<Registration> {
                                 address: "manial , cairo",
                                 birthdate: "1999-02-02",
                                 gender: "male");
-
-                            User user2 = await addUser(body: user.toMap());
+                            print(1);
+                            UserRegisterationModel user2 =
+                                await addUser(body:user.toMap());
+                                
+                            print(2);
                             if (nameTextField.text.isNotEmpty) {
                               if (user2.username == nameTextField.text[0]) {
                                 setState(() {
@@ -273,14 +277,14 @@ class _RegistrationState extends State<Registration> {
                                   passwordVerififcation = user2.password1;
                                   rePasswordVerififcation = user2.password2;
                                 });
+                              } else {
+                                setState(() {
+                                  emailVerification = user2.email;
+                                  usernameVerification = user2.username;
+                                  passwordVerififcation = user2.password1;
+                                  rePasswordVerififcation = user2.password2;
+                                });
                               }
-                              else {
-                              setState(() {
-                                emailVerification = user2.email;
-                                usernameVerification = user2.username;
-                                passwordVerififcation = user2.password1;
-                                rePasswordVerififcation = user2.password2;
-                              });}
                             } else {
                               setState(() {
                                 emailVerification = user2.email;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Models/profileModel.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import '../Models/user.dart';
 
@@ -6,11 +7,11 @@ class Profile extends StatelessWidget {
   User user;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User>(
+    return FutureBuilder<UserProfileModel>(
       future: getUser(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          User userdata = snapshot.data;
+          UserProfileModel userdata = snapshot.data;
           print(snapshot.data);
           print(userdata.username);
           return Scaffold(

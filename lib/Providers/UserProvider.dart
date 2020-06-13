@@ -3,30 +3,28 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gp_login_screen/Class/exceptions.dart';
+import 'package:gp_login_screen/Models/RegisterationModel.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
+import 'package:gp_login_screen/Models/profileModel.dart';
 import 'package:gp_login_screen/Models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<User> addUser({Map body}) async {
-  print("object");
-
-  print(body);
+Future<UserRegisterationModel> addUser({Map body}) async {
+  
   final url = "http://127.0.0.1:8000/registration/";
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
-    print(response.body);
     if (statusCode < 200 || statusCode >= 400 || json == null) {
       print(response.body);
-      return User.fromJson(json.decode(response.body));
+      return UserRegisterationModel.fromJson(json.decode(response.body));
     }
-    print(response.body);
     var jsonData = json.decode(response.body);
 
     _save(jsonData['key']);
-    return User.fromJson(json.decode(response.body));
+    return UserRegisterationModel.fromJson(json.decode(response.body));
   });
 }
 
@@ -119,7 +117,7 @@ getCart() async {
   return jsonn;
 }
 
-Future<User> getUser() async {
+Future<UserProfileModel> getUser() async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
   print(token);
@@ -132,7 +130,7 @@ Future<User> getUser() async {
       throw new Exception("Error while fetching data");
     }
     print(response.body);
-    return User.fromJson(data);
+    return UserProfileModel.fromJson(data);
   });
 }
 
