@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 
 class CartProvider with ChangeNotifier {
-  List<String> features = [];
+  List<int> features = [];
 
-  void addFeatures(List<String> feature) {
+  void addFeatures(List feature) {
     features.clear();
-    features.addAll(feature);
+    feature.forEach((f)=>
+      features.add(f)
+    );
     notifyListeners();
   }
 
-  List<String> get listFeatures {
+  List<int> get listFeatures {
     return [...features];
   }
 

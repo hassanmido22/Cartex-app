@@ -89,19 +89,21 @@ Future<Product> listSelectedProducts(String barcode) async {
   return x.last;
 }
 
-addToCart(String id,List<String> features) async {
-  print(features);
+addToCart(String id,{Map features}) async {
+  
   final sp = await SharedPreferences.getInstance();
   String tokenn = sp.getString('token');
+  print(features);
   final url = "http://127.0.0.1:8000/orders/addtocart/";
   var response = await http.post(url,
-      body: {'barcode': '$id', 'token': tokenn,'features':features.toString()}, headers: {'Authorization': tokenn});
+      body: {'barcode': '$id', 'token': tokenn,'features':features}, headers: {'Authorization': tokenn});
   if (response.statusCode == 200) {
     print(response.body);
   } else {
     print(response.body);
   }
 }
+
 
 getCart() async {
   final sp = await SharedPreferences.getInstance();
@@ -115,6 +117,7 @@ getCart() async {
   }
   return jsonn;
 }
+
 
 Future<UserProfileModel> getUser() async {
   final sp = await SharedPreferences.getInstance();

@@ -16,7 +16,7 @@ class SingleProductWidget extends StatefulWidget {
 }
 
 class _SingleProductWidgetState extends State<SingleProductWidget> {
-  List<String> featuresList = [];
+  List featuresList = [];
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
         .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
 */
     widget.product.feature
-        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
+        .forEach((f) => {featuresList.add(f.values.elementAt(0).id)});
   }
 
   @override
@@ -233,7 +233,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                                                       .elementAt(i)
                                                       .values
                                                       .elementAt(y)
-                                                      .values;
+                                                      .id;
                                                 cartProvider
                                                     .addFeatures(featuresList);
                                               },

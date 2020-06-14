@@ -88,10 +88,8 @@ class _SingleProductState extends State<SingleProduct> {
                         color: Color.fromRGBO(238, 76, 125, 1),
                         onPressed: () {
                           final cartdata = Provider.of<CartProvider>(context);
-                          List<String> featuresData = cartdata.listFeatures;
-                          //print(featuresData);
-                          //print(productId);
-                          addToCart(widget.id, featuresData);
+                          print(cartdata.listFeatures);
+                          addToCart(widget.id,features: {"sc":22});
                         },
                         child: Text(
                           "Add to cart",
