@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Providers/UserProvider.dart';
+import '../Models/cart.dart';
 
 class CartList extends StatefulWidget {
   @override
@@ -14,125 +16,120 @@ class _CartListState extends State<CartList> {
       child: Row(
         children: <Widget>[
           Expanded(
-              flex: 261,
-              child: Card(
-                  elevation: 1,
-                  color: Colors.white, //Color.fromRGBO(248, 248, 255, 1),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 87,
-                        child: Container(
+            flex: 261,
+            child: Card(
+              elevation: 1,
+              color: Colors.white, //Color.fromRGBO(248, 248, 255, 1),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    flex: 87,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(9)),
+                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://cf5.s3.souqcdn.com/item/2019/12/09/23/74/46/44/item_XXL_23744644_0e118a89359c0.jpg',
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: (55 * m.size.width) / 360,
+                          height: (55 * m.size.width) / 360,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(9)),
-                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://cf5.s3.souqcdn.com/item/2019/12/09/23/74/46/44/item_XXL_23744644_0e118a89359c0.jpg',
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: (55 * m.size.width) / 360,
-                              height: (55 * m.size.width) / 360,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(9),
-                                image: DecorationImage(
-                                    image: imageProvider, fit: BoxFit.contain),
-                              ),
-                            ),
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                            borderRadius: BorderRadius.circular(9),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.contain),
                           ),
                         ),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
-                      Expanded(
-                          flex: 173,
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 20, 15, 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 173,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 15, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              "DR.Pepper",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromRGBO(72, 67, 92, 1),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: Text(
+                              "10.00 LE",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color.fromRGBO(194, 194, 194, 1),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
-                                  child: Text(
-                                    "DR.Pepper",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color.fromRGBO(72, 67, 92, 1),
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                  height: 30,
+                                  width: 50,
+                                  padding: EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                      color: Color.fromRGBO(238, 76, 125, 1),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: IconButton(
+                                    icon: Icon(Icons.remove),
+                                    iconSize: 18,
+                                    alignment: Alignment.center,
+                                    onPressed: () {},
+                                    color: Color.fromRGBO(247, 245, 221, 1),
+                                  ),
+                                ),
+                                Text(
+                                  "1",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color.fromRGBO(72, 67, 92, 1),
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  child: Text(
-                                    "10.00 LE",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Color.fromRGBO(194, 194, 194, 1),
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                  height: 30,
+                                  width: 50,
+                                  padding: EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                      color: Color.fromRGBO(238, 76, 125, 1),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: IconButton(
+                                    icon: Icon(Icons.add),
+                                    iconSize: 17,
+                                    alignment: Alignment.center,
+                                    onPressed: () {},
+                                    color: Color.fromRGBO(247, 245, 221, 1),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 30,
-                                        width: 50,
-                                        padding: EdgeInsets.all(0),
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Color.fromRGBO(238, 76, 125, 1),
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: IconButton(
-                                          icon: Icon(Icons.remove),
-                                          iconSize: 18,
-                                          alignment: Alignment.center,
-                                          onPressed: () {},
-                                          color:
-                                              Color.fromRGBO(247, 245, 221, 1),
-                                        ),
-                                      ),
-                                      Text(
-                                        "1",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color.fromRGBO(72, 67, 92, 1),
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 30,
-                                        width: 50,
-                                        padding: EdgeInsets.all(0),
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Color.fromRGBO(238, 76, 125, 1),
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: IconButton(
-                                          icon: Icon(Icons.add),
-                                          iconSize: 17,
-                                          alignment: Alignment.center,
-                                          onPressed: () {},
-                                          color:
-                                              Color.fromRGBO(247, 245, 221, 1),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
                               ],
                             ),
-                          ))
-                    ],
-                  ))),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Expanded(
             flex: 59,
             child: Container(
@@ -228,8 +225,10 @@ class _CartListState extends State<CartList> {
                       "Checkout",
                       style: TextStyle(color: Colors.white),
                     ),
-                    onPressed: () {}),
-              )
+                    onPressed: () {
+                      getCart();
+                    }),
+              ),
             ],
           ),
         ),
