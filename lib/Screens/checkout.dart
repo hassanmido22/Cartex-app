@@ -1,17 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Models/cart.dart';
+import 'package:gp_login_screen/Models/product_item.dart';
+import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:gp_login_screen/Screens/payment.dart';
+import 'package:provider/provider.dart';
+import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
 
-class Check extends StatelessWidget {
+class Checkout extends StatefulWidget {
   //final dummy_data = [];
-  final List<String> _dropdownValues = [
-    "10 pt",
-    "20 pt",
-    "30 pt",
-    "40 pt",
-    "50 pt"
-  ];
+  @override
+  _CheckoutState createState() => _CheckoutState();
+}
+
+class _CheckoutState extends State<Checkout> {
+  final List<String> _dropdownValues = <String>[];
+  String _currentItem = '10 pts';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final userProvider = Provider.of<UserProvider>(context);
+    double userPoints = userProvider.getUser().points;
+    int listPoints = 10;
+    List values = [];
+    while (userPoints >= listPoints) {
+      _dropdownValues.add('$listPoints pts');
+      listPoints = (listPoints >= 100) ? listPoints + 10 : listPoints + 50 ;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    var userPoints = userProvider.getUser().points.toStringAsFixed(0);
+    //print(userPoints);
+    Cart cart = cartProvider.cartList();
+    var subtotal = cart.total.toStringAsFixed(2);
+    var total = subtotal;
+
+    Widget singleProductItem({Item item}) {
+      var quantity = item.quantity;
+      var price = item.productObj.price.toStringAsFixed(2);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 20, bottom: 15, left: 10, right: 10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    item.product,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF707070),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  flex: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    "x $quantity",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Nunito',
+                      color: const Color(0xFF707070),
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  flex: 2,
+                ),
+                Expanded(
+                  child: Text(
+                    "$price LE",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Nunito',
+                      color: const Color(0xFF707070),
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  flex: 3,
+                )
+              ],
+            ),
+          ),
+          Center(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              height: 3,
+              width: 340,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFFFFF),
@@ -81,70 +182,10 @@ class Check extends StatelessWidget {
                   alignment: Alignment.center,
                   height: 250,
                   child: ListView.builder(
-                    itemCount: 10,
+                    itemCount: cart.items.length,
                     itemBuilder: (BuildContext ctx, int index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 20, bottom: 15, left: 10, right: 10),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(
-                                    "Nescafe Drink",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: 'Nunito',
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF707070),
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  flex: 6,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "x2",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Nunito',
-                                      color: const Color(0xFF707070),
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  flex: 2,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "159 LE",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Nunito',
-                                      color: const Color(0xFF707070),
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  flex: 3,
-                                )
-                              ],
-                            ),
-                          ),
-                          Center(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              height: 3,
-                              width: 340,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                          ),
-                        ],
+                      return singleProductItem(
+                        item: cart.items.elementAt(index),
                       );
                     },
                   ),
@@ -172,7 +213,7 @@ class Check extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
                 child: Text(
-                  '3500 LE',
+                  '$subtotal LE',
                   style: TextStyle(
                     fontSize: 17,
                     fontFamily: 'Nunito-bold',
@@ -200,34 +241,40 @@ class Check extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 110,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: const Color(0xFF6ED8A2),
-                ),
-                child: DropdownButton(
-                  items: _dropdownValues
-                      .map((value) => DropdownMenuItem(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontFamily: 'Nunito',
-                                  fontSize: 19,
-                                ),
-                                textDirection: TextDirection.ltr,
-                              ),
+                  width: 110,
+                  height: 40,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: const Color(0xFF6ED8A2),
+                  ),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    value: _currentItem,
+                    onChanged: (String string) =>
+                        setState(() => _currentItem = string),
+                    selectedItemBuilder: (BuildContext context) {
+                      return _dropdownValues.map<Widget>((String item) {
+                        return Text(item);
+                      }).toList();
+                    },
+                    items: _dropdownValues.map((String item) {
+                      return DropdownMenuItem<String>(
+                        child: Container(
+                          child: Text(
+                            '$item',
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 19,
                             ),
-                            value: value,
-                          ))
-                      .toList(),
-                  onChanged: (String value) {},
-                  isExpanded: false,
-                  value: _dropdownValues.first,
-                ),
-              ),
+                          ),
+                        ),
+                        value: item,
+                      );
+                    }).toList(),
+                  )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
                 child: Text(
@@ -275,7 +322,9 @@ class Check extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
                 child: Text(
-                  '3350 LE',
+                  (double.parse(userPoints) > 10)
+                      ? total + " LE"
+                      : subtotal + " LE",
                   style: TextStyle(
                     fontSize: 17,
                     fontFamily: 'Nunito-bold',

@@ -1,9 +1,10 @@
 import 'dart:io';
-
+import '../Models/top_product_chart.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gp_login_screen/Class/exceptions.dart';
 import 'package:gp_login_screen/Models/RegisterationModel.dart';
+import 'package:gp_login_screen/Models/cart.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Models/profileModel.dart';
 import 'package:gp_login_screen/Models/user.dart';
@@ -13,7 +14,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<UserRegisterationModel> addUser({Map body}) async {
-  
   final url = "http://127.0.0.1:8000/registration/";
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
@@ -43,23 +43,61 @@ Future<String> signIn({Map body}) async {
   }
 }
 
+deleteFromCart(int id) async {
+  final sp = await SharedPreferences.getInstance();
+  String token = sp.getString('token');
+  final url = "http://127.0.0.1:8000/orders/deletefromcart/$id/";
+  var response =
+      await http.delete(url, headers: {"Authorization": "Token $token"});
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  }
+  return json.decode(response.body);
+}
+
+updateCart(int item, int qty) async {
+  final sp = await SharedPreferences.getInstance();
+  String token = sp.getString('token');
+  final url = "http://127.0.0.1:8000/orders/orderdetailsquantity/";
+  var response = await http.post(url,
+      body: {'token': '$token', 'id': '$item', 'quantity': '$qty'},
+      headers: {"token": "$token"});
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  }
+  return json.decode(response.body);
+}
+
+checkOut({int points}) async {
+  final sp = await SharedPreferences.getInstance();
+  String token = sp.getString('token');
+  final url = "http://127.0.0.1:8000/orders/checkout/";
+  var response = await http.post(url,
+      body: {'token': '$token', 'points': '$points'},
+      headers: {"token": "$token"});
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  }
+  return json.decode(response.body);
+}
+
 logout() {
-    final url = "http://127.0.0.1:8000/users/logout/";
-    return http.post(url).then((http.Response response) {
-      final int statusCode = response.statusCode;
-      print(response.body);
-      print(statusCode);
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
-      }
-      return User.fromJson(json.decode(response.body));
-    });
-  }
-  
-  clear() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.clear();
-  }
+  final url = "http://127.0.0.1:8000/users/logout/";
+  return http.post(url).then((http.Response response) {
+    final int statusCode = response.statusCode;
+    print(response.body);
+    print(statusCode);
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while fetching data");
+    }
+    return User.fromJson(json.decode(response.body));
+  });
+}
+
+clear() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.clear();
+}
 
 _save(String token) async {
   final prefs = await SharedPreferences.getInstance();
@@ -89,14 +127,18 @@ Future<Product> listSelectedProducts(String barcode) async {
   return x.last;
 }
 
-addToCart(String id,{Map features}) async {
-  
+addToCart(String id, List<int> features) async {
   final sp = await SharedPreferences.getInstance();
   String tokenn = sp.getString('token');
-  print(features);
+
+  Map map = {
+    'barcode': '$id',
+    'token': tokenn,
+    'features': json.encode(features)
+  };
+
   final url = "http://127.0.0.1:8000/orders/addtocart/";
-  var response = await http.post(url,
-      body: {'barcode': '$id', 'token': tokenn,'features':features}, headers: {'Authorization': tokenn});
+  var response = await http.post(url, body: map);
   if (response.statusCode == 200) {
     print(response.body);
   } else {
@@ -104,20 +146,36 @@ addToCart(String id,{Map features}) async {
   }
 }
 
+// authentication need to be modified
 
-getCart() async {
+Future<Cart> getCart() async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
   final url = "http://127.0.0.1:8000/orders/cart/";
-  var response =
-      await http.get(url, headers: {"Authorization": "Token $token"});
-  var jsonn =json.decode(response.body);
+  var response = await http.get(url, headers: {"Authorization": "$token"});
+  print(response.body);
+
+  var jsonn = json.decode(response.body);
   if (response.statusCode == 200) {
-    return jsonn;
+    return cartFromJson(response.body);
   }
   return jsonn;
 }
 
+Future<List<TopProducts>> getTheHeightestProduct() async {
+  final sp = await SharedPreferences.getInstance();
+  String token = sp.getString('token');
+  final url = "http://127.0.0.1:8000/orders/topuserproducts";
+  var response = await http.get(url, headers: {"token": "$token"});
+  var jsonn = json.decode(response.body);
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    //return TopProducts.fromJson(jsonn);
+    return topProductsFromJson(response.body);
+  }
+  return topProductsFromJson(response.body);
+}
 
 Future<UserProfileModel> getUser() async {
   final sp = await SharedPreferences.getInstance();

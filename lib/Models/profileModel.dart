@@ -16,6 +16,7 @@ class UserProfileModel {
   String birthdate;
   String address;
   String avatar;
+  double points;
 
   UserProfileModel({
     this.username,
@@ -27,6 +28,7 @@ class UserProfileModel {
     this.birthdate,
     this.address,
     this.avatar,
+    this.points,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -39,7 +41,8 @@ class UserProfileModel {
           //phone: json["phone"] as String,
           birthdate: json["birthdate"] as String,
           address: json["address"] as String,
-          avatar: json["avatar"] as String);
+          avatar: json["avatar"] as String,
+          points: json["points"] as double);
 
   Map<String, dynamic> toJson() => {
         "username": username,
@@ -51,6 +54,7 @@ class UserProfileModel {
         "birthdate": birthdate,
         "address": address,
         "avatar": avatar,
+        "points": points,
       };
 
   Map toMapRegister() {

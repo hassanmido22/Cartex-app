@@ -17,7 +17,7 @@ class SingleProduct extends StatefulWidget {
 }
 
 class _SingleProductState extends State<SingleProduct> {
-  int productId;
+  Product productt;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _SingleProductState extends State<SingleProduct> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Product product = snapshot.data;
-              productId = product.id;
+              productt = product;
               return SingleProductWidget(
                 product: product,
               );
@@ -88,8 +88,11 @@ class _SingleProductState extends State<SingleProduct> {
                         color: Color.fromRGBO(238, 76, 125, 1),
                         onPressed: () {
                           final cartdata = Provider.of<CartProvider>(context);
-                          print(cartdata.listFeatures);
-                          addToCart(widget.id,features: {"sc":22});
+                          addToCart(widget.id, cartdata.listFeatures);
+                          //cartdata.addItem(productt);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            cartdata.addNewItem();
+                          });
                         },
                         child: Text(
                           "Add to cart",

@@ -2,9 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Screens/scanner.dart';
+import 'package:provider/provider.dart';
+import '../Providers/cartProvider.dart';
 
-class Home extends StatelessWidget {
+import '../Providers/UserInfoProvider.dart';
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserProvider>(context).fetchUser();
+    });
+  }
+/*
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    
+  }*/
+
   final bool dialVisible = true;
+
   SpeedDial buildSpeedDial() {
     return SpeedDial(
       backgroundColor: const Color(0xFFEE4C7D),

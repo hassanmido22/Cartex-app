@@ -1,166 +1,158 @@
-import 'package:gp_login_screen/Models/product_item.dart';
+// To parse this JSON data, do
+//
+//     final cart = cartFromJson(jsonString);
+
+import 'dart:convert';
+
+Cart cartFromJson(String str) => Cart.fromJson(json.decode(str));
+
+String cartToJson(Cart data) => json.encode(data.toJson());
 
 class Cart {
+  Cart({
+    this.user,
+    this.ordered,
+    this.id,
+    this.items,
+    this.total,
+    this.createdAt,
+  });
+
   String user;
   bool ordered;
   int id;
-  List<Items> items;
-  int total;
-  String createdAt;
+  List<Item> items;
+  double total;
+  DateTime createdAt;
 
-  Cart(
-      {this.user,
-      this.ordered,
-      this.id,
-      this.items,
-      this.total,
-      this.createdAt});
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+        user: json["user"],
+        ordered: json["ordered"],
+        id: json["id"],
+        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        total: json["total"].toDouble(),
+        createdAt: DateTime.parse(json["created_at"]),
+      );
 
-  Cart.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    ordered = json['ordered'];
-    id = json['id'];
-    if (json['items'] != null) {
-      items = new List<Items>();
-      json['items'].forEach((v) {
-        items.add(new Items.fromJson(v));
-      });
-    }
-    total = json['total'];
-    createdAt = json['created_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user'] = this.user;
-    data['ordered'] = this.ordered;
-    data['id'] = this.id;
-    if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
-    }
-    data['total'] = this.total;
-    data['created_at'] = this.createdAt;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "user": user,
+        "ordered": ordered,
+        "id": id,
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "total": total,
+        "created_at": createdAt.toIso8601String(),
+      };
 }
 
-class Items {
+class Item {
+
+  Map<String, dynamic> toCartJson() => {
+        "quantity": '$quantity',
+        "id": '$id',
+      };
+      
+  Item({
+    this.product,
+    this.quantity,
+    this.id,
+    this.productObj,
+    this.price,
+    this.features,
+  });
+
   String product;
   int quantity;
   int id;
   ProductObj productObj;
-  int price;
+  double price;
+  List<Feature> features;
 
-  Items({this.product, this.quantity, this.id, this.productObj, this.price});
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+        product: json["product"],
+        quantity: json["quantity"],
+        id: json["id"],
+        productObj: ProductObj.fromJson(json["product_obj"]),
+        price: json["price"].toDouble(),
+        features: List<Feature>.from(
+            json["features"].map((x) => Feature.fromJson(x))),
+      );
 
-  Items.fromJson(Map<String, dynamic> json) {
-    product = json['product'];
-    quantity = json['quantity'];
-    id = json['id'];
-    productObj = json['product_obj'] != null
-        ? new ProductObj.fromJson(json['product_obj'])
-        : null;
-    price = json['price'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product'] = this.product;
-    data['quantity'] = this.quantity;
-    data['id'] = this.id;
-    if (this.productObj != null) {
-      data['product_obj'] = this.productObj.toJson();
-    }
-    data['price'] = this.price;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "product": product,
+        "quantity": quantity,
+        "id": id,
+        "product_obj": productObj.toJson(),
+        "price": price,
+        "features": List<dynamic>.from(features.map((x) => x.toJson())),
+      };
 }
 
+class Feature {
+  Feature({
+    this.id,
+    this.values,
+  });
+
+  int id;
+  String values;
+
+  factory Feature.fromJson(Map<String, dynamic> json) => Feature(
+        id: json["id"],
+        values: json["values"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "values": values,
+      };
+}
+
+ 
+
 class ProductObj {
+  ProductObj({
+    this.name,
+    this.barcode,
+    this.description,
+    this.discountPrice,
+    this.image,
+    this.id,
+    this.category,
+    this.price,
+    this.featurecount,
+  });
+
   String name;
   String barcode;
   String description;
-  int discountPrice;
+  double discountPrice;
   String image;
   int id;
   String category;
-  int price;
-  List<Null> feature;
+  double price;
   int featurecount;
-  Branch branch;
 
-  ProductObj(
-      {this.name,
-      this.barcode,
-      this.description,
-      this.discountPrice,
-      this.image,
-      this.id,
-      this.category,
-      this.price,
-      this.feature,
-      this.featurecount,
-      this.branch});
+  factory ProductObj.fromJson(Map<String, dynamic> json) => ProductObj(
+        name: json["name"],
+        barcode: json["Barcode"],
+        description: json["description"],
+        discountPrice: json["discount_price"],
+        image: json["image"],
+        id: json["id"],
+        category: json["category"],
+        price: json["price"].toDouble(),
+        featurecount: json["featurecount"],
+      );
 
-  ProductObj.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    barcode = json['Barcode'];
-    description = json['description'];
-    discountPrice = json['discount_price'];
-    image = json['image'];
-    id = json['id'];
-    category = json['category'];
-    price = json['price'];
-    if (json['feature'] != null) {
-      feature = new List<Null>();
-      json['feature'].forEach((v) {
-        feature.add(new Feature.fromJson(v));
-      });
-    }
-    featurecount = json['featurecount'];
-    branch =
-        json['branch'] != null ? new Branch.fromJson(json['branch']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['Barcode'] = this.barcode;
-    data['description'] = this.description;
-    data['discount_price'] = this.discountPrice;
-    data['image'] = this.image;
-    data['id'] = this.id;
-    data['category'] = this.category;
-    data['price'] = this.price;
-    if (this.feature != null) {
-      data['feature'] = this.feature.map((v) => v.).toList();
-    }
-    data['featurecount'] = this.featurecount;
-    if (this.branch != null) {
-      data['branch'] = this.branch.toJson();
-    }
-    return data;
-  }
-}
-
-class Branch {
-  String name;
-  String qRCode;
-  int id;
-
-  Branch({this.name, this.qRCode, this.id});
-
-  Branch.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    qRCode = json['QR_code'];
-    id = json['id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['QR_code'] = this.qRCode;
-    data['id'] = this.id;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "Barcode": barcode,
+        "description": description,
+        "discount_price": discountPrice,
+        "image": image,
+        "id": id,
+        "category": category,
+        "price": price,
+        "featurecount": featurecount,
+      };
 }

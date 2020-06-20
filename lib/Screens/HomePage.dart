@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gp_login_screen/Models/cart.dart';
+import 'package:gp_login_screen/Models/profileModel.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:gp_login_screen/Screens/Login_page.dart';
@@ -16,6 +17,8 @@ import 'package:gp_login_screen/Screens/payment.dart';
 import 'package:gp_login_screen/Screens/profile.dart';
 import 'package:gp_login_screen/Screens/singleProduct.dart';
 import 'package:provider/provider.dart';
+import '../Providers/UserInfoProvider.dart';
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -41,13 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       );
 
-      var result = await BarcodeScanner.scan(options: options);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SingleProduct(id: result.rawContent)),
-      );
+      await BarcodeScanner.scan(options: options).then((result) {
+        if (result.rawContent.isNotEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SingleProduct(id: result.rawContent)),
+          );
+        }
+      });
     } on PlatformException catch (e) {
       var result = ScanResult(
         type: ResultType.Error,
@@ -96,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserProfileModel user =  Provider.of<UserProvider>(context).getUser();
     MediaQueryData m = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(238, 238, 255, 1),
@@ -148,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: CachedNetworkImage(
                             imageUrl:
-                                'https://images.generated.photos/stMCMQ1z_3Kaw0xNryLyxBXvpe8tzE_HzSQrDbo1O9A/rs:fit:512:512/Z3M6Ly9nZW5lcmF0/ZWQtcGhvdG9zL3Yz/XzA1MjI5OTEuanBn.jpg',
+                                user.avatar,
                             imageBuilder: (context, imageProvider) => Container(
                               width: (50 * m.size.width) / 236,
                               height: (50 * m.size.width) / 236,
@@ -165,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Text("Hassan ElShamy",
+                        Text(user.username,
                             style: TextStyle(
                               fontSize: 18,
                               color: Color.fromRGBO(72, 67, 92, 1),
@@ -173,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             )),
                         SizedBox(height: 5),
                         Text(
-                          "@hassanelshamy",
+                          user.email,
                           style: TextStyle(
                             fontSize: 13,
                             color: Color.fromRGBO(177, 177, 177, 1),
@@ -263,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: CachedNetworkImage(
                     imageUrl:
-                        'https://images.generated.photos/stMCMQ1z_3Kaw0xNryLyxBXvpe8tzE_HzSQrDbo1O9A/rs:fit:512:512/Z3M6Ly9nZW5lcmF0/ZWQtcGhvdG9zL3Yz/XzA1MjI5OTEuanBn.jpg',
+                        user.avatar,
                     imageBuilder: (context, imageProvider) => Container(
                       width: (55 * m.size.width) / 360,
                       height: (55 * m.size.width) / 360,
@@ -280,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Hassan ElShamy",
+                    Text(user.username,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color.fromRGBO(72, 67, 92, 1),
@@ -292,7 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.white,
                           borderRadius: new BorderRadius.circular(8)),
                       padding: EdgeInsets.fromLTRB(12, 2.5, 12, 2.5),
-                      child: Text("150 pt",
+                      child: Text(user.points.toStringAsFixed(0)+"  pts",
                           style: TextStyle(
                             fontSize: 10,
                             color: Color.fromRGBO(238, 76, 125, 1),
@@ -367,6 +373,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(25),
                       highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
                       onTap: () {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          print("//////////////////////////////////////////");
+                          Provider.of<CartProvider>(context).fetchCartList();
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -458,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Check(),
+                              builder: (context) => Checkout(),
                             ));
                       },
                       child: Column(

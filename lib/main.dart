@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
+import 'package:gp_login_screen/Providers/searchProvider.dart';
 import 'package:gp_login_screen/Screens/HomePage.dart';
 import 'package:gp_login_screen/Screens/Login_page.dart';
 import 'package:gp_login_screen/Screens/Register.dart';
 import 'package:gp_login_screen/Screens/Register_1.dart';
 import 'package:gp_login_screen/Screens/action.dart';
+import 'package:gp_login_screen/Screens/search.dart';
 import 'package:gp_login_screen/Screens/spalsh_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,15 +31,25 @@ Map<int, Color> color = {
 
 MaterialColor m = MaterialColor(0xFFFFFFFF, color);
 
-void main() => runApp(ChangeNotifierProvider(
-        create: (ctx) => CartProvider(),
+void main() => runApp(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (ctx) => CartProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (ctx) => UserProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (ctx) => SearchProvider(),
+          ),
+        ],
         child: new MaterialApp(
-      home: MyApp(),
-      theme: ThemeData(
-        primarySwatch: m,
-      ),
-      debugShowCheckedModeBanner: false,
-    )));
+          home: MyApp(),
+          theme: ThemeData(
+            primarySwatch: m,
+          ),
+          debugShowCheckedModeBanner: false,
+        )));
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -70,8 +83,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   navigatePageHome() {
-    Navigator.of(context)
-        .pushReplacement(new MaterialPageRoute(builder: (context) => Home()));
+    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+        builder: (context) => Home() //SearhTest() //Home()
+        ));
   }
 
   @override
