@@ -32,7 +32,7 @@ class _CheckoutState extends State<Checkout> {
     List values = [];
     while (userPoints >= listPoints) {
       _dropdownValues.add('$listPoints pts');
-      listPoints = (listPoints >= 100) ? listPoints + 10 : listPoints + 50 ;
+      listPoints = (listPoints >= 100) ? listPoints + 10 : listPoints + 50;
     }
   }
 
@@ -226,68 +226,78 @@ class _CheckoutState extends State<Checkout> {
           SizedBox(
             height: 30,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                child: Text(
-                  'Points Discount ',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontFamily: 'Nunito-med',
-                    color: const Color(0xFF383447),
-                  ),
-                ),
-              ),
-              Container(
-                  width: 110,
-                  height: 40,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: const Color(0xFF6ED8A2),
-                  ),
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    icon: Icon(Icons.keyboard_arrow_down),
-                    value: _currentItem,
-                    onChanged: (String string) =>
-                        setState(() => _currentItem = string),
-                    selectedItemBuilder: (BuildContext context) {
-                      return _dropdownValues.map<Widget>((String item) {
-                        return Text(item);
-                      }).toList();
-                    },
-                    items: _dropdownValues.map((String item) {
-                      return DropdownMenuItem<String>(
-                        child: Container(
-                          child: Text(
-                            '$item',
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 19,
-                            ),
-                          ),
+          (double.parse(userPoints) >= 10)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                      child: Text(
+                        'Points Discount ',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: 'Nunito-med',
+                          color: const Color(0xFF383447),
                         ),
-                        value: item,
-                      );
-                    }).toList(),
-                  )),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                child: Text(
-                  '-150 LE',
+                      ),
+                    ),
+                    Container(
+                        width: 110,
+                        height: 40,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          color: const Color(0xFF6ED8A2),
+                        ),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          icon: Icon(Icons.keyboard_arrow_down),
+                          value: _currentItem,
+                          onChanged: (String string) =>
+                              setState(() => _currentItem = string),
+                          selectedItemBuilder: (BuildContext context) {
+                            return _dropdownValues.map<Widget>((String item) {
+                              return Text(item);
+                            }).toList();
+                          },
+                          items: _dropdownValues.map((String item) {
+                            return DropdownMenuItem<String>(
+                              child: Container(
+                                child: Text(
+                                  '$item',
+                                  textDirection: TextDirection.ltr,
+                                  style: TextStyle(
+                                    fontFamily: 'Nunito',
+                                    fontSize: 19,
+                                  ),
+                                ),
+                              ),
+                              value: item,
+                            );
+                          }).toList(),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
+                      child: Text(
+                        '-150 LE',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: 'Nunito-bold',
+                          color: const Color(0xFFEE4C7D),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  'unfortunately , you dont have enough points to use',
+                  textAlign: TextAlign.left,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 14,
                     fontFamily: 'Nunito-bold',
                     color: const Color(0xFFEE4C7D),
                   ),
                 ),
-              ),
-            ],
-          ),
           SizedBox(
             height: 5,
           ),
