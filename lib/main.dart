@@ -8,6 +8,8 @@ import 'package:gp_login_screen/Screens/spalsh_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Providers/homeProvider.dart';
+import './Providers/OrderProvider.dart';
+import './Providers/OrderProvider.dart';
 //void main() => runApp(MyApp());
 
 Map<int, Color> color = {
@@ -35,6 +37,9 @@ void main() => runApp(MultiProvider(
           ),
           ChangeNotifierProvider(
             create: (ctx) => HomeProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (ctx) => OrderProvider(),
           ),
         ],
         child: new MaterialApp(

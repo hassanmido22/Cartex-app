@@ -18,7 +18,7 @@ import 'package:gp_login_screen/Screens/profile.dart';
 import 'package:gp_login_screen/Screens/singleProduct.dart';
 import 'package:provider/provider.dart';
 import '../Providers/UserInfoProvider.dart';
-
+import 'ordersScreen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    UserProfileModel user =  Provider.of<UserProvider>(context).getUser();
+    UserProfileModel user = Provider.of<UserProvider>(context).getUser();
     MediaQueryData m = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(238, 238, 255, 1),
@@ -153,8 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                user.avatar,
+                            imageUrl: user.avatar,
                             imageBuilder: (context, imageProvider) => Container(
                               width: (50 * m.size.width) / 236,
                               height: (50 * m.size.width) / 236,
@@ -268,8 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: CachedNetworkImage(
-                    imageUrl:
-                        user.avatar,
+                    imageUrl: user.avatar,
                     imageBuilder: (context, imageProvider) => Container(
                       width: (55 * m.size.width) / 360,
                       height: (55 * m.size.width) / 360,
@@ -298,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.white,
                           borderRadius: new BorderRadius.circular(8)),
                       padding: EdgeInsets.fromLTRB(12, 2.5, 12, 2.5),
-                      child: Text(user.points.toStringAsFixed(0)+"  pts",
+                      child: Text(user.points.toStringAsFixed(0) + "  pts",
                           style: TextStyle(
                             fontSize: 10,
                             color: Color.fromRGBO(238, 76, 125, 1),
@@ -482,6 +480,45 @@ class _MyHomePageState extends State<MyHomePage> {
                           SizedBox(height: 10),
                           Text(
                             "Checkout",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color.fromRGBO(72, 67, 92, 1),
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 1,
+                    margin: EdgeInsets.all(5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    color: Colors.white,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(25),
+                      highlightColor: Color.fromRGBO(255, 255, 255, 0.1),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Orderslist(),
+                            ));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image(
+                            image: AssetImage("drawables/order.png"),
+                            width: 60,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "Orders",
                             style: TextStyle(
                               fontSize: 20,
                               color: Color.fromRGBO(72, 67, 92, 1),
