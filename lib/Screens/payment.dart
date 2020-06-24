@@ -1,152 +1,5 @@
-/*import 'package:flutter/material.dart';
-
-class PaymentScreen extends StatelessWidget {
-  //final dummy_data = [];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFFFFFF),
-        title: Text(
-          'Checkout',
-          style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Nunito',
-              color: const Color(0xFF383447)),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: const Color(0xFF707070),
-            size: 30,
-          ),
-          onPressed: () {},
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.home,
-              color: const Color(0xFF707070),
-              size: 30,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-        padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-        height: 500,
-        width: double.infinity,
-        color: const Color(0xFFEFF4F8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.topLeft,
-              child: Container(
-                child: Text(
-                  'Order Summary',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Nunito',
-                    color: const Color(0xFF48435C),
-                  ),
-                ),
-              ),
-            ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                height: 3,
-                width: 340,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 420,
-              child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (BuildContext ctx, int index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 20, bottom: 15, left: 10, right: 10),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                
-                                  "Nescafe Drink",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Nunito',
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF707070),
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                flex: 6,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "x2",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'Nunito',
-                                    color: const Color(0xFF707070),
-
-                                  ),
-                                  textAlign: TextAlign.right,
-                                ),
-                                flex: 2,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "159 LE",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'Nunito',
-                                    color:const Color(0xFF707070),
-                                  ),
-                                   textAlign: TextAlign.right,
-                                ),
-                                flex: 3,
-                              )
-                            ],
-                          ),
-                        ),
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            height: 3,
-                            width: 340,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
+import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
+import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -175,6 +28,10 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+     UserProvider userProvider = Provider.of<UserProvider>(context);
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+    String total = cartProvider.cartList().total.toStringAsFixed(2);
+    print(userProvider.getUser().payments.toString()+"sdfgnh");
     MediaQueryData m = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -495,7 +352,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                       fontSize: 20),
                 ),
                 Text(
-                  "3535 LE",
+                  "$total LE",
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontWeight: FontWeight.w800,
