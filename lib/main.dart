@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gp_login_screen/Providers/OrderProvider.dart';
 import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
-//import 'package:gp_login_screen/Providers/searchProvider.dart';
+import 'package:gp_login_screen/Providers/searchProvider.dart';
 import 'package:gp_login_screen/Screens/HomePage.dart';
 import 'package:gp_login_screen/Screens/Login_page.dart';
 import 'package:gp_login_screen/Screens/Register.dart';
 import 'package:gp_login_screen/Screens/Register_1.dart';
 import 'package:gp_login_screen/Screens/action.dart';
-//import 'package:gp_login_screen/Screens/search.dart';
+import 'package:gp_login_screen/Screens/search.dart';
 import 'package:gp_login_screen/Screens/spalsh_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +40,7 @@ void main() => runApp(MultiProvider(
             create: (ctx) => UserProvider(),
           ),
           ChangeNotifierProvider(
-            create: (ctx) => OrderProvider(),
+            create: (ctx) => SearchProvider(),
           ),
         ],
         child: new MaterialApp(
