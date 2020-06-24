@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -171,13 +170,21 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   width: 50,
                 ),
-                Container(
-                  child: Text(
-                    'Main Home',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Nunito-bold',
-                      color: const Color(0xff14999E),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Scanner()),
+                    );
+                  },
+                  child: Container(
+                    child: Text(
+                      'Main Home',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Nunito-bold',
+                        color: const Color(0xff14999E),
+                      ),
                     ),
                   ),
                 ),
