@@ -149,9 +149,8 @@ class PaymentScreen extends StatelessWidget {
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gp_login_screen/Providers/cartProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
+
 //void main() => runApp(PaymentScreen());
 
 class PaymentScreen extends StatefulWidget {
@@ -176,12 +175,6 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    CartProvider cartProvider = Provider.of<CartProvider>(context);
-    String total = cartProvider.cartList().total.toStringAsFixed(2);
-    print(userProvider.getUser().payments.toString()+"sdfgnh");
-
     MediaQueryData m = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -502,7 +495,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                       fontSize: 20),
                 ),
                 Text(
-                  "$total LE",
+                  "3535 LE",
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontWeight: FontWeight.w800,

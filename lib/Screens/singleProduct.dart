@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
-import 'package:gp_login_screen/Screens/HomePage.dart';
-import 'package:gp_login_screen/Screens/cart.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
 import 'package:provider/provider.dart';
 
@@ -91,11 +89,10 @@ class _SingleProductState extends State<SingleProduct> {
                         onPressed: () {
                           final cartdata = Provider.of<CartProvider>(context);
                           addToCart(widget.id, cartdata.listFeatures);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyHomePage()),
-                          );
+                          //cartdata.addItem(productt);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            cartdata.addNewItem();
+                          });
                         },
                         child: Text(
                           "Add to cart",
