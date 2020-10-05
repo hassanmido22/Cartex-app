@@ -26,7 +26,6 @@ dependencies:
   device_preview: ^0.4.4
   cached_network_image: ^2.1.0+1
   sliding_up_panel: ^1.0.2
-  flutter_credit_card: ^0.1.1
   flutter_svg: ^0.17.4
   provider: ^3.0.0
   flutter_speed_dial: ^1.2.5
@@ -36,9 +35,17 @@ dependencies:
   barcode_scan: ^3.0.1
   date_format: ^1.0.8
   flutter_tags: "^0.4.8+2"
+  flip_card: ^0.4.4
   searchable_dropdown: ^1.1.3
   carousel_slider: ^2.2.1
   charts_flutter: ^0.9.0
+  drawing_animation: ^0.1.1
+  flutter_credit_card: ^0.1.1
+  image_picker: ^0.6.7+4
+  universal_html: ^1.2.1
+  mailer: ^3.0.4
+  modal_progress_hud: ^0.1.3 
+  flutter_slidable: ^0.4.9 
 
 dev_dependencies:
   flutter_test:
@@ -89,9 +96,31 @@ flutter:
     - assets/visa.svg
     - assets/drawer-icon.svg
     - assets/scanner.svg
-    - assets/hot sale.svg
+    - assets/hotsale.svg
     - assets/like.svg
     - assets/party.svg
+    - assets/download.svg
+    - assets/filter.svg
+    - assets/delete.svg
+    - assets/heart.svg
+    - assets/supermarket.svg
+    - assets/browser.svg
+    - assets/out.svg
+    - assets/pin.svg
+    - assets/logo.svg
+    - assets/logo2.svg
+    - assets/confirm.svg
+    - assets/close.svg
+    - assets/stopwatch.svg
+    - assets/addcredit.svg
+    - assets/edit.svg
+    - assets/statistics.svg
+    - assets/post.svg
+    - assets/clock.svg
+    - assets/rich.svg
+    - assets/cartex.svg
+    - assets/logo.png
+    - assets/list.png
 
   #  - drawables/a_dot_burr.jpeg
   #  - drawables/a_dot_ham.jpeg

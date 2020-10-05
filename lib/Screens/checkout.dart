@@ -1,10 +1,68 @@
+import 'package:drawing_animation/drawing_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/cart.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
+import 'package:gp_login_screen/Providers/paymentProvider.dart';
 import 'package:gp_login_screen/Screens/payment.dart';
 import 'package:provider/provider.dart';
 import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
+
+class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+  final double appBarHeight = 80.0;
+
+  CustomAppBar({
+    Key key,
+  }) : super(key: key);
+  @override
+  get preferredSize => Size.fromHeight(appBarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Checkout',
+                        style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w700,
+                            color: Color.fromRGBO(56, 52, 71, 1),
+                            fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 30,
+                    icon: Icon(Icons.home),
+                    color: Color.fromRGBO(56, 52, 71, 1),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.black12, blurRadius: 6.0, offset: Offset(0.0, 3))
+        ], color: Colors.white));
+  }
+}
 
 class Checkout extends StatefulWidget {
   //final dummy_data = [];
@@ -13,137 +71,44 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-  final List<String> _dropdownValues = <String>[];
-  String _currentItem = '10 pts';
+  String points = '0';
+  final pointsEditingController = TextEditingController();
+  double total = 0;
+  bool disable = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      //pointsEditingController.
+    });
   }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    final userProvider = Provider.of<UserProvider>(context);
-    double userPoints = userProvider.getUser().points;
-    int listPoints = 10;
-    List values = [];
-    while (userPoints >= listPoints) {
-      _dropdownValues.add('$listPoints pts');
-      listPoints = (listPoints >= 100) ? listPoints + 10 : listPoints + 50;
-    }
+    setState(() {
+      pointsEditingController.text = '0';
+      points = pointsEditingController.text;
+      total = Provider.of<CartProvider>(context).isLoading() ||
+              Provider.of<CartProvider>(context).getIsEmpty()
+          ? 0
+          : Provider.of<CartProvider>(context).cartList().total;
+    });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  checkoutList() {
     final cartProvider = Provider.of<CartProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     var userPoints = userProvider.getUser().points.toStringAsFixed(0);
-    //print(userPoints);
     Cart cart = cartProvider.cartList();
-    var subtotal = cart.total.toStringAsFixed(2);
-    var total = subtotal;
+    double subtotal = double.parse(cart.total.toStringAsFixed(2));
 
-    Widget singleProductItem({Item item}) {
-      var quantity = item.quantity;
-      var price = item.productObj.price.toStringAsFixed(2);
-      return Column(
+    return SingleChildScrollView(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 20, bottom: 15, left: 10, right: 10),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    item.product,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Nunito',
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF707070),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  flex: 6,
-                ),
-                Expanded(
-                  child: Text(
-                    "x $quantity",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Nunito',
-                      color: const Color(0xFF707070),
-                    ),
-                    textAlign: TextAlign.right,
-                  ),
-                  flex: 2,
-                ),
-                Expanded(
-                  child: Text(
-                    "$price LE",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Nunito',
-                      color: const Color(0xFF707070),
-                    ),
-                    textAlign: TextAlign.right,
-                  ),
-                  flex: 3,
-                )
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              height: 3,
-              width: 340,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFFFFFF),
-        title: Text(
-          'Checkout',
-          style: TextStyle(
-              fontSize: 17,
-              fontFamily: 'Nunito-bold',
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF383447)),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: const Color(0xFF707070),
-            size: 30,
-          ),
-          onPressed: () {},
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.home,
-              color: const Color(0xFF707070),
-              size: 30,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Column(
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -229,6 +194,7 @@ class _CheckoutState extends State<Checkout> {
           (double.parse(userPoints) >= 10)
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
@@ -242,51 +208,90 @@ class _CheckoutState extends State<Checkout> {
                       ),
                     ),
                     Container(
-                        width: 110,
-                        height: 40,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          color: const Color(0xFF6ED8A2),
-                        ),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          value: _currentItem,
-                          onChanged: (String string) =>
-                              setState(() => _currentItem = string),
-                          selectedItemBuilder: (BuildContext context) {
-                            return _dropdownValues.map<Widget>((String item) {
-                              return Text(item);
-                            }).toList();
-                          },
-                          items: _dropdownValues.map((String item) {
-                            return DropdownMenuItem<String>(
-                              child: Container(
-                                child: Text(
-                                  '$item',
-                                  textDirection: TextDirection.ltr,
-                                  style: TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 19,
-                                  ),
-                                ),
-                              ),
-                              value: item,
-                            );
-                          }).toList(),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                      child: Text(
-                        '-150 LE',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'Nunito-bold',
-                          color: const Color(0xFFEE4C7D),
+                      width: 50,
+                      height: 30,
+                      child: TextFormField(
+                        validator: (String x) {
+                          return null;
+                        },
+                        onChanged: (String y) async {
+                          if (y.isEmpty) {
+                            setState(() {
+                              points = "empty";
+                              total = subtotal;
+                            });
+                          }
+
+                          if (double.parse(y) > double.parse(userPoints)) {
+                            setState(() {
+                              total = subtotal -
+                                  double.parse(y.substring(0, y.length - 1)) /
+                                      4;
+                              points = y;
+                              disable = true;
+                              pointsEditingController.text =
+                                  y.substring(0, y.length - 1);
+                            });
+                          } else {
+                            setState(() {
+                              total = subtotal -
+                                  double.parse(pointsEditingController.text) /
+                                      4;
+                              points = y;
+                              // disable = false;
+                            });
+                          }
+                        },
+                        controller: pointsEditingController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: const Color(0xFF466365),
+                          ),
                         ),
                       ),
                     ),
+                    Text(
+                      "of $userPoints pts",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Nunito-bold',
+                        color: const Color(0xFF383447),
+                      ),
+                    ),
+                    points == "empty"
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
+                            child: Text(
+                              '- ${0.0} LE',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontFamily: 'Nunito-bold',
+                                color: const Color(0xFFEE4C7D),
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
+                            child: Text(
+                              '- ${double.parse(pointsEditingController.text) / 4} LE',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontFamily: 'Nunito-bold',
+                                color: const Color(0xFFEE4C7D),
+                              ),
+                            ),
+                          ),
                   ],
                 )
               : Text(
@@ -332,9 +337,7 @@ class _CheckoutState extends State<Checkout> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
                 child: Text(
-                  (double.parse(userPoints) > 10)
-                      ? total + " LE"
-                      : subtotal + " LE",
+                  '${total.toStringAsFixed(2)} LE',
                   style: TextStyle(
                     fontSize: 17,
                     fontFamily: 'Nunito-bold',
@@ -348,36 +351,153 @@ class _CheckoutState extends State<Checkout> {
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-            alignment: Alignment.bottomRight,
-            child: ButtonTheme(
-              minWidth: 110,
-              height: 37,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(17),
+            margin: EdgeInsets.only(right: 20, top: 30, bottom: 30, left: 20),
+            alignment: Alignment.center,
+            child: RaisedButton(
+              onPressed: () {
+                Provider.of<PaymentProvider>(context).setPoints(
+                    points == "empty"
+                        ? 0
+                        : int.parse(pointsEditingController.text));
+                Provider.of<PaymentProvider>(context).setTotal(total);
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentScreen(),
+                    ));
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              color:
+                  /*: disable
+                    ? Color(0xFFD5D5D5)
+                    :*/
+                  Color.fromRGBO(238, 76, 125, 1),
+              child: Container(
+                padding: EdgeInsets.only(top: 17, bottom: 17),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                        /*disable
+                              ? Icons.error_outline
+                              :*/
+                        Icons.check_circle_outline,
+                        color: Colors.white),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Proceed",
+                        style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-                color: const Color(0xFF7AB4E6),
-                child: Text(
-                  'Proceed ',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Nunito-med',
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentScreen(),
-                      ));
-                },
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  singleProductItem({Item item}) {
+    var quantity = item.quantity;
+    var price = item.productObj.price.toStringAsFixed(2);
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 20, bottom: 15, left: 10, right: 10),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  item.product,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF707070),
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                flex: 6,
+              ),
+              Expanded(
+                child: Text(
+                  "x $quantity",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Nunito',
+                    color: const Color(0xFF707070),
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+                flex: 2,
+              ),
+              Expanded(
+                child: Text(
+                  "$price LE",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Nunito',
+                    color: const Color(0xFF707070),
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+                flex: 3,
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            height: 3,
+            width: 340,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool run = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    return Scaffold(
+        appBar: CustomAppBar(),
+        body: (cartProvider.isLoading())
+            ? Center(
+                child: AnimatedDrawing.svg(
+                "assets/logo.svg",
+                run: this.run,
+                width: 150,
+                duration: new Duration(milliseconds: 1500),
+                lineAnimation: LineAnimation.oneByOne,
+                animationCurve: Curves.decelerate,
+                onFinish: () => setState(() {
+                  this.run = false;
+                }),
+              ))
+            : (cartProvider.getIsEmpty())
+                ? Center(
+                    child: Text("Cart is empty"),
+                  )
+                : checkoutList());
   }
 }

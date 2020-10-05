@@ -55,10 +55,7 @@ class Scanner extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => MyHomePage(
-                            title: 'shopping',
-                          )),
+                  MaterialPageRoute(builder: (context) => ShoppingPage()),
                 );
               },
               child: Image.asset('drawables/flash.png'),

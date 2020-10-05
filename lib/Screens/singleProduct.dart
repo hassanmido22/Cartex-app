@@ -1,26 +1,34 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:drawing_animation/drawing_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
+import 'package:gp_login_screen/Providers/product_provider.dart';
 import 'package:gp_login_screen/Screens/HomePage.dart';
 import 'package:gp_login_screen/Screens/singleProductwidget.dart';
 import 'package:provider/provider.dart';
 
 class SingleProduct extends StatefulWidget {
-  final String id;
-
-  const SingleProduct({Key key, this.id}) : super(key: key);
-
   @override
   _SingleProductState createState() => _SingleProductState();
 }
 
 class _SingleProductState extends State<SingleProduct> {
-  Product productt;
+
+  
+
+  bool run = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white, //Color.fromRGBO(238, 238, 255, 1),
       appBar: AppBar(
@@ -43,23 +51,24 @@ class _SingleProductState extends State<SingleProduct> {
           onPressed: () {},
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            child: FutureBuilder<Product>(
-          future: listSelectedProducts(widget.id),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Product product = snapshot.data;
-              productt = product;
-              return SingleProductWidget(
-                product: product,
-              );
-            } else {
-              return new CircularProgressIndicator();
-            }
-          },
-        )),
-      ),
+      body: productProvider.getLoading()
+          ? Center(
+                child: AnimatedDrawing.svg(
+                "assets/logo.svg",
+                run: this.run,
+                width: 150,
+                duration: new Duration(milliseconds: 1500),
+                lineAnimation: LineAnimation.oneByOne,
+                animationCurve: Curves.decelerate,
+                onFinish: () => setState(() {
+                  this.run = false;
+                }),
+              ))
+          : productProvider.getEmpty()
+              ? Center(child: Text("There is no product"))
+              : SingleProductWidget(
+                  product: productProvider.getProduct(),
+                ),
       bottomNavigationBar: BottomAppBar(
           elevation: 1,
           child: Container(
@@ -87,12 +96,17 @@ class _SingleProductState extends State<SingleProduct> {
                             borderRadius: BorderRadius.circular(25)),
                         color: Color.fromRGBO(238, 76, 125, 1),
                         onPressed: () {
-                          final cartdata = Provider.of<CartProvider>(context);
-                          addToCart(widget.id, cartdata.listFeatures);
+                          
+                          final ProductProvider productProvider =
+                              Provider.of<ProductProvider>(context);
+                          addToCart(productProvider.getProduct().barcode,
+                              productProvider.listFeatures).then((value)=>{
+                                Provider.of<CartProvider>(context).fetchCartList()
+                              });
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyHomePage()),
+                                builder: (context) => ShoppingPage()),
                           );
                         },
                         child: Text(

@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:gp_login_screen/Models/product_item.dart';
 import 'package:gp_login_screen/Providers/cartProvider.dart';
+import 'package:gp_login_screen/Providers/product_provider.dart';
+import 'package:gp_login_screen/Providers/wishlistProvider.dart';
 import 'package:provider/provider.dart';
 
 class SingleProductWidget extends StatefulWidget {
@@ -16,29 +19,22 @@ class SingleProductWidget extends StatefulWidget {
 }
 
 class _SingleProductWidgetState extends State<SingleProductWidget> {
-  List featuresList = [];
-
+  bool isFav;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    /*widget.product.feature
-        .forEach((f) => {featuresList.add(f.values.elementAt(0).values)});
-*/
-    widget.product.feature
-        .forEach((f) => {featuresList.add(f.values.elementAt(0).id)});
+    setState(() {
+      isFav = widget.product.isFavourit;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    cartProvider.addFeatures(featuresList);
-
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
     MediaQueryData m = MediaQuery.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      //padding: EdgeInsets.only(bottom: 100,top: ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -46,27 +42,6 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
             padding: EdgeInsets.only(left: 10, right: 10, top: 20),
             child: Column(
               children: <Widget>[
-                /*Container(
-                          width: 70,
-                          height: 7,
-                          margin: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(216, 216, 216, 1),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          child: Text(
-                            "Product Details",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromRGBO(72, 67, 92, 1)),
-                          ),
-                        ),
-                        Divider(
-                          height: 50,
-                        ),*/
                 Stack(
                   alignment: AlignmentDirectional.center,
                   children: <Widget>[
@@ -118,13 +93,31 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  widget.product.category,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(238, 76, 125, 1),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      widget.product.category,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(238, 76, 125, 1),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          wishlistProvider.addToWishlist(
+                              item: widget.product.id);
+                          setState(() {
+                            isFav = !isFav;
+                          });
+                        },
+                        iconSize: 40,
+                        icon: Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          color: Color.fromRGBO(238, 76, 125, 1),
+                        )),
+                  ],
                 ),
                 SizedBox(
                   height: 10,
@@ -174,7 +167,7 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                   height: 10,
                 ),
                 (widget.product.feature.length == 0)
-                    ? Text("data")
+                    ? SizedBox(height:10)
                     : Container(
                         child: ListView.builder(
                             scrollDirection: Axis.vertical,
@@ -196,57 +189,111 @@ class _SingleProductWidgetState extends State<SingleProductWidget> {
                                       ),
                                     ),
                                     Container(
-                                      margin:
-                                          EdgeInsets.only(top: 5, bottom: 5),
-                                      child: GridView.builder(
-                                        padding: EdgeInsets.all(5),
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 5,
-                                                childAspectRatio: 1.4),
-                                        shrinkWrap: true,
-                                        itemCount: widget.product.feature
-                                            .elementAt(i)
-                                            .values
-                                            .length,
-                                        itemBuilder:
-                                            (BuildContext context, int y) {
-                                          return Container(
-                                            margin: EdgeInsets.only(
-                                                left: 5,
-                                                right: 5,
-                                                top: 5,
-                                                bottom: 5),
-                                            child: RaisedButton(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              padding: EdgeInsets.only(
-                                                  left: 10,
-                                                  right: 10,
-                                                  top: 0,
-                                                  bottom: 0),
-                                              onPressed: () {
-                                                  featuresList[i] = widget
-                                                      .product.feature
-                                                      .elementAt(i)
-                                                      .values
-                                                      .elementAt(y)
-                                                      .id;
-                                                cartProvider
-                                                    .addFeatures(featuresList);
-                                              },
-                                              child: Text(widget.product.feature
-                                                  .elementAt(i)
-                                                  .values
-                                                  .elementAt(y)
-                                                  .values),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                        margin: EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: Tags(
+                                          horizontalScroll: true,
+                                          itemCount: widget.product.feature
+                                              .elementAt(i)
+                                              .values
+                                              .length,
+                                          itemBuilder: (int y) {
+                                            return Tooltip(
+                                                message: widget.product.feature
+                                                    .elementAt(i)
+                                                    .values
+                                                    .elementAt(y)
+                                                    .values,
+                                                child:
+                                                    Consumer<ProductProvider>(
+                                                  builder: (context, model,
+                                                      widgett) {
+                                                    return ItemTags(
+                                                      onPressed: (item) {
+                                                        print(widget
+                                                            .product.feature
+                                                            .elementAt(i)
+                                                            .values
+                                                            .elementAt(y)
+                                                            .id
+                                                            .toString());
+                                                        model.selectTag(
+                                                            i,
+                                                            widget
+                                                                .product.feature
+                                                                .elementAt(i)
+                                                                .values
+                                                                .elementAt(y)
+                                                                .id);
+                                                      },
+                                                      textScaleFactor: 1.1,
+                                                      activeColor: widget
+                                                                  .product
+                                                                  .feature
+                                                                  .elementAt(i)
+                                                                  .values
+                                                                  .elementAt(y)
+                                                                  .id ==
+                                                              model.listFeatures[
+                                                                  i]
+                                                          ? Color.fromRGBO(
+                                                              132, 132, 132, 1)
+                                                          : Colors.white,
+                                                      textActiveColor: widget
+                                                                  .product
+                                                                  .feature
+                                                                  .elementAt(i)
+                                                                  .values
+                                                                  .elementAt(y)
+                                                                  .id !=
+                                                              model.listFeatures[
+                                                                  i]
+                                                          ? Color.fromRGBO(
+                                                              132, 132, 132, 1)
+                                                          : Colors.white,
+                                                      textColor: widget.product
+                                                                  .feature
+                                                                  .elementAt(i)
+                                                                  .values
+                                                                  .elementAt(y)
+                                                                  .id !=
+                                                              model.listFeatures[
+                                                                  i]
+                                                          ? Color.fromRGBO(
+                                                              132, 132, 132, 1)
+                                                          : Colors.white,
+                                                      color: widget.product
+                                                                  .feature
+                                                                  .elementAt(i)
+                                                                  .values
+                                                                  .elementAt(y)
+                                                                  .id ==
+                                                              model.listFeatures[
+                                                                  i]
+                                                          ? Color.fromRGBO(
+                                                              132, 132, 132, 1)
+                                                          : Colors.white,
+                                                      border: Border.all(
+                                                        width: 1.2,
+                                                        color: Color.fromRGBO(
+                                                            132, 132, 132, 1),
+                                                      ),
+                                                      //Color.fromRGBO(132, 132, 132, 1),
+
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      title: widget
+                                                          .product.feature
+                                                          .elementAt(i)
+                                                          .values
+                                                          .elementAt(y)
+                                                          .values,
+                                                      index: y,
+                                                    );
+                                                  },
+                                                ));
+                                          },
+                                        )),
                                   ],
                                 ),
                               );

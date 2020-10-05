@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:gp_login_screen/Models/recommentationModel.dart';
+
 import '../Models/top_product_chart.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +16,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<UserRegisterationModel> addUser({Map body}) async {
-  final url = "http://127.0.0.1:8000/registration/";
+  final url = "https://cartex-app.herokuapp.com/registration/";
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode >= 400 || json == null) {
@@ -28,7 +30,7 @@ Future<UserRegisterationModel> addUser({Map body}) async {
 }
 
 Future<String> signIn({Map body}) async {
-  final url = "http://127.0.0.1:8000/users/login/";
+  final url = "https://cartex-app.herokuapp.com/users/login/";
   var jsonData;
   var response = await http.post(url, body: body);
   if (response.statusCode == 200) {
@@ -46,7 +48,7 @@ Future<String> signIn({Map body}) async {
 deleteFromCart(int id) async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
-  final url = "http://127.0.0.1:8000/orders/deletefromcart/$id/";
+  final url = "https://cartex-app.herokuapp.com/orders/deletefromcart/$id/";
   var response =
       await http.delete(url, headers: {"Authorization": "Token $token"});
   if (response.statusCode == 200) {
@@ -58,7 +60,7 @@ deleteFromCart(int id) async {
 updateCart(int item, int qty) async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
-  final url = "http://127.0.0.1:8000/orders/orderdetailsquantity/";
+  final url = "https://cartex-app.herokuapp.com/orders/orderdetailsquantity/";
   var response = await http.post(url,
       body: {'token': '$token', 'id': '$item', 'quantity': '$qty'},
       headers: {"token": "$token"});
@@ -68,21 +70,19 @@ updateCart(int item, int qty) async {
   return json.decode(response.body);
 }
 
-checkOut({int points}) async {
-  final sp = await SharedPreferences.getInstance();
-  String token = sp.getString('token');
-  final url = "http://127.0.0.1:8000/orders/checkout/";
-  var response = await http.post(url,
-      body: {'token': '$token', 'points': '$points'},
-      headers: {"token": "$token"});
+Future<List<Recommendationlist>> getReccommendedProducts(String name) async {
+  List<Recommendationlist> r = [];
+  final url = //"https://egypt.souq.com/eg-en/";
+      "http://127.0.0.1:4000/getAssoc?Conf=0.008&Supp=0.0001&Product=$name";
+  var response = await http.post(url, headers: {'accept': 'application/json'});
   if (response.statusCode == 200) {
-    return json.decode(response.body);
+    return recommendationlistFromJson(response.body);
   }
-  return json.decode(response.body);
+  return r;
 }
 
 logout() {
-  final url = "http://127.0.0.1:8000/users/logout/";
+  final url = "https://cartex-app.herokuapp.com/users/logout/";
   return http.post(url).then((http.Response response) {
     final int statusCode = response.statusCode;
     print(response.body);
@@ -90,13 +90,20 @@ logout() {
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while fetching data");
     }
+    clearBranch();
+    clearToken();
     return User.fromJson(json.decode(response.body));
   });
 }
 
-clear() async {
+clearToken() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  preferences.clear();
+  preferences.remove('token');
+}
+
+clearBranch() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.remove('branch');
 }
 
 _save(String token) async {
@@ -113,8 +120,9 @@ read() async {
   return value;
 }
 
+/*
 Future<Product> listSelectedProducts(String barcode) async {
-  final url = "http://127.0.0.1:8000/products/products-list/?barcode=$barcode";
+  final url = "https://cartex-app.herokuapp.com/products/products-list/?barcode=$barcode";
   var responseJson;
   try {
     final response = await http.get(url, headers: {"branch": "MAADY_BRANCH"});
@@ -126,7 +134,7 @@ Future<Product> listSelectedProducts(String barcode) async {
   List<Product> x = productFromJson(responseJson);
   return x.last;
 }
-
+*/
 addToCart(String id, List<int> features) async {
   final sp = await SharedPreferences.getInstance();
   String tokenn = sp.getString('token');
@@ -137,7 +145,7 @@ addToCart(String id, List<int> features) async {
     'features': json.encode(features)
   };
 
-  final url = "http://127.0.0.1:8000/orders/addtocart/";
+  final url = "https://cartex-app.herokuapp.com/orders/addtocart/";
   var response = await http.post(url, body: map);
   if (response.statusCode == 200) {
     print(response.body);
@@ -146,12 +154,10 @@ addToCart(String id, List<int> features) async {
   }
 }
 
-// authentication need to be modified
-
 Future<Cart> getCart() async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
-  final url = "http://127.0.0.1:8000/orders/cart/";
+  final url = "https://cartex-app.herokuapp.com/orders/cart/";
   var response = await http.get(url, headers: {"Authorization": "$token"});
   print(response.body);
 
@@ -163,17 +169,21 @@ Future<Cart> getCart() async {
 }
 
 Future<List<TopProducts>> getTheHeightestProduct() async {
+  print("sdfg");
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
-  final url = "http://127.0.0.1:8000/orders/topuserproducts";
-  var response = await http.get(url, headers: {"token": "$token"});
-  var jsonn = json.decode(response.body);
+  final url = "https://cartex-app.herokuapp.com/orders/topuserproducts";
 
+  var response = await http.get(url, headers: {"token": "$token"});
+
+  var jsonn = json.decode(response.body);
+  print(response.body);
   if (response.statusCode == 200) {
     print(response.body);
     //return TopProducts.fromJson(jsonn);
     return topProductsFromJson(response.body);
   }
+  print(response.body);
   return topProductsFromJson(response.body);
 }
 
@@ -181,7 +191,7 @@ Future<UserProfileModel> getUser() async {
   final sp = await SharedPreferences.getInstance();
   String token = sp.getString('token');
   print(token);
-  final url = "http://127.0.0.1:8000/user/current/";
+  final url = "https://cartex-app.herokuapp.com/user/current/";
   return await http.get(url, headers: {"Authorization": "$token"}).then(
       (http.Response response) {
     final data = json.decode(response.body);
@@ -197,7 +207,7 @@ Future<UserProfileModel> getUser() async {
 
 /*
   Future<List<Product>> listProducts() async {
-    final url = "http://127.0.0.1:8000/products/products-list/";
+    final url = "https://cartex-app.herokuapp.com/products/products-list/";
     var responseJson;
     try{
       final response = await http.get(url,headers: {

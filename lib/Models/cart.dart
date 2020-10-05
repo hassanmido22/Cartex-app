@@ -22,7 +22,7 @@ class Cart {
   bool ordered;
   int id;
   List<Item> items;
-  double total;
+  double total ;
   DateTime createdAt;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -137,7 +137,7 @@ class ProductObj {
         barcode: json["Barcode"],
         description: json["description"],
         discountPrice: json["discount_price"],
-        image: json["image"],
+        image: 'https://cartex-app.herokuapp.com'+json["image"],
         id: json["id"],
         category: json["category"],
         price: json["price"].toDouble(),

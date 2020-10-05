@@ -18,6 +18,9 @@ class Orders {
     this.items,
     this.total,
     this.createdAt,
+    this.points,
+    this.hours,
+    this.minutes,
   });
 
   String user;
@@ -26,6 +29,9 @@ class Orders {
   List<Item> items;
   double total;
   DateTime createdAt;
+  int hours;
+  int minutes;
+  int points;
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
         user: json["user"],
@@ -33,6 +39,9 @@ class Orders {
         id: json["id"],
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
         total: json["total"],
+        hours: json["hours"],
+        minutes: json["minutes"],
+        points: json["points"],
         createdAt: DateTime.parse(json["created_at"]),
       );
 
@@ -42,6 +51,9 @@ class Orders {
         "id": id,
         "items": List<dynamic>.from(items.map((x) => x.toJson())),
         "total": total,
+        "hours": hours,
+        "minutes": minutes,
+        "points": points,
         "created_at": createdAt.toIso8601String(),
       };
 }
@@ -137,21 +149,21 @@ class ProductObj {
   double price;
   List<ProductObjFeature> feature;
   int featurecount;
-  Branch branch;
+  String branch;
 
   factory ProductObj.fromJson(Map<String, dynamic> json) => ProductObj(
         name: json["name"],
         barcode: json["Barcode"],
         description: json["description"],
         discountPrice: json["discount_price"],
-        image: json["image"],
+        image: 'https://cartex-app.herokuapp.com' + json["image"],
         id: json["id"],
         category: json["category"],
         price: json["price"],
         feature: List<ProductObjFeature>.from(
             json["feature"].map((x) => ProductObjFeature.fromJson(x))),
         featurecount: json["featurecount"],
-        branch: Branch.fromJson(json["branch"]),
+        branch: json["branch"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -165,7 +177,7 @@ class ProductObj {
         "price": price,
         "feature": List<dynamic>.from(feature.map((x) => x.toJson())),
         "featurecount": featurecount,
-        "branch": branch.toJson(),
+        "branch": branch,
       };
 }
 

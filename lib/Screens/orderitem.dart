@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Screens/orderdetails.dart';
 import '../Models/orders.dart';
-import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
 
 class OrderItem extends StatefulWidget {
@@ -28,169 +27,161 @@ class _OrderItemState extends State<OrderItem> {
     String date = dateFormat.format(useorder.createdAt);
     String time = timeFormat.format(useorder.createdAt);
 
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
+    return Container(
+
+      margin: EdgeInsets.only(left:15,right: 15,top: 5,bottom: 5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black12, blurRadius: 6.0, offset: Offset(0.0, 3))
+          ],
+          borderRadius: BorderRadius.circular(15)),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        height: 270,
-        child: Card(
-          elevation: 2,
-          child: Column(
-            children: <Widget>[
-              Row(
+        margin: EdgeInsets.only(left: 25, top: 10, bottom: 10, right: 25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 15, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'OrderID:',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: 'Nunito',
-                        color: const Color(0xFF14999E),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    'Order 154628',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Nunito',
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(
-                      '$id',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Nunito',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                  Text(
+                    date,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Nunito',
+                     color: Colors.black38,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              Row(
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8, bottom: 8),
+              child: Row(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Ordered-At:',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: 'Nunito',
-                        color: const Color(0xFF14999E),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    'Payment : ',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Nunito',
+                      color: Colors.black38,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(
-                      '$date',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Nunito',
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Cash",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Nunito',
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              Row(
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Time:',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: 'Nunito',
-                        color: const Color(0xFF14999E),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          'Quantity :  ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontFamily: 'Nunito',
+                            color: Colors.black38,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${useorder.items.length}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Nunito',
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(
-                      '$time',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'Nunito',
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          'Total Amount : ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontFamily: 'Nunito',
+                            color: Colors.black38,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$total',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Nunito',
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              /* Divider(
-                  height: 4,
-                  endIndent: 6,
-                  indent: 6,
-                  color: Color.fromRGBO(238, 76, 125, 1),
-                ),*/
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Total:',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: 'Nunito',
-                        color: const Color(0xFF14999E),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(
-                      '$total',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'Nunito',
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: ButtonTheme(
-                  minWidth: 190,
-                  height: 45,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
-                    ),
-                    color: Color.fromRGBO(238, 76, 125, 1),
-                    child: Text(
-                      'View Order',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Nunito',
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Orderdetails(
-                              order: widget.order,
-                            ),
-                          ));
-                    },
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              child: RaisedButton(
+                padding:
+                    EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 15),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    side: BorderSide(
+                      color: Color.fromRGBO(112, 112, 112, 1),
+                    )),
+                color: Colors.white,
+                child: Text(
+                  'Details',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'Nunito',
+                    color: Color.fromRGBO(112, 112, 112, 1),
                   ),
                 ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Orderdetails(
+                          order: widget.order,
+                        ),
+                      ));
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

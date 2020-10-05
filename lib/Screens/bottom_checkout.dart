@@ -38,6 +38,7 @@ class Bottom extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               height: 100,
+              
             ),
             Container(
               child: Row(

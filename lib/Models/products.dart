@@ -15,7 +15,7 @@ class ProductsList {
         this.count,
         this.results,
     });
-
+    
     dynamic next;
     dynamic prev;
     int count;

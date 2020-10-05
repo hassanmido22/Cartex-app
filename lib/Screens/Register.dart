@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/RegisterationModel.dart';
 import 'package:gp_login_screen/Models/user.dart';
+import 'package:gp_login_screen/Providers/UserInfoProvider.dart';
 import 'package:gp_login_screen/Providers/UserProvider.dart';
+import 'package:gp_login_screen/Providers/registrationProvider.dart';
 import 'package:gp_login_screen/Screens/Register_2.dart';
 import 'package:gp_login_screen/Screens/Register_4.dart';
+import 'package:gp_login_screen/Screens/action.dart';
+import 'package:provider/provider.dart';
 
 class Registration extends StatefulWidget {
   static int c = 0xFF466365;
@@ -13,11 +17,6 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  String emailVerification = "null";
-  String usernameVerification = "null";
-  String passwordVerififcation = "null";
-  String rePasswordVerififcation = "null";
-
   final _formKey = GlobalKey<FormState>();
   final _scaffold = GlobalKey<ScaffoldState>();
   final TextEditingController nameTextField = new TextEditingController();
@@ -30,7 +29,7 @@ class _RegistrationState extends State<Registration> {
   final TextEditingController rePasswordTextController =
       new TextEditingController();
 
-  int errorBorderColor = 0xFF17B7BD;
+  int errorBorderColor = 0xFF383447;
 
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -50,6 +49,9 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    RegistrationProvider registrationProvider =
+        Provider.of<RegistrationProvider>(context);
+    MediaQueryData m = MediaQuery.of(context);
     return Scaffold(
       key: _scaffold,
       body: SingleChildScrollView(
@@ -59,257 +61,244 @@ class _RegistrationState extends State<Registration> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.fromLTRB(25, 100, 0, 0),
-                alignment: FractionalOffset.topLeft,
-                child: Image.asset('drawables/HELLO.png'),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                alignment: FractionalOffset.topLeft,
-                child: Text(
-                  'Register to get Started ',
-                  style: TextStyle(
-                      fontSize: 19,
-                      color: const Color(
-                        0xFF466365,
-                      ),
-                      fontFamily: 'Nunito-med'),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextFormField(
-                  validator: (String x) {
-                    if (usernameVerification != "null") {
-                      return usernameVerification;
-                    }
-                    return null;
-                  },
-                  onChanged: (String y) async {},
-                  controller: nameTextField,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
+                height: m.size.height * 3 / 4,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.fromLTRB(25, 100, 0, 0),
+                      alignment: FractionalOffset.topLeft,
+                      child: Text(
+                        'Hello',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(
+                              0xFFEE4C7D,
+                            ),
+                            fontFamily: 'Nunito'),
                       ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      alignment: FractionalOffset.topLeft,
+                      child: Text(
+                        'Register to get Started ',
+                        style: TextStyle(
+                            fontSize: 19,
+                            color: const Color(
+                              0xFF466365,
+                            ),
+                            fontFamily: 'Nunito-med'),
                       ),
                     ),
-                    labelStyle: TextStyle(
-                      color: const Color(0xFF466365),
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextFormField(
-                  validator: (String x) {
-                    if (emailVerification != "null") {
-                      return emailVerification;
-                    }
-                    return null;
-                  },
-                  onChanged: (String y) async {},
-                  controller: emailTextController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    labelStyle: TextStyle(
-                      color: const Color(0xFF466365),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextFormField(
-                  validator: (String x) {
-                    if (passwordVerififcation != "null") {
-                      return passwordVerififcation;
-                    }
-                    return null;
-                  },
-                  onChanged: (String y) async {
-                    if (y.isNotEmpty) {}
-                  },
-                  obscureText: true,
-                  controller: passwordTextController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    labelStyle: TextStyle(
-                      color: const Color(0xFF466365),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextFormField(
-                  obscureText: true,
-                  validator: (String x) {
-                    if (rePasswordVerififcation != "null") {
-                      return rePasswordVerififcation;
-                    } else if (x != passwordTextController.text) {
-                      return "The two passwords didnt match";
-                    }
-                    return null;
-                  },
-                  onChanged: (String y) async {},
-                  controller: rePasswordTextController,
-                  decoration: InputDecoration(
-                    labelText: 'Repeat Password',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(errorBorderColor),
-                      ),
-                    ),
-                    labelStyle: TextStyle(
-                      color: const Color(0xFF466365),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: ButtonTheme(
-                      minWidth: 91,
-                      height: 37,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17),
-                        ),
-                        color: const Color(0xFFEBF5EE),
-                        child: Icon(Icons.arrow_back,
-                            color: const Color(0xFF14999E)),
-                        onPressed: () {
-                          Navigator.pop(context);
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: TextFormField(
+                        validator: (String x) {
+                          return registrationProvider.getUsernameMessage();
                         },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: ButtonTheme(
-                      minWidth: 91,
-                      height: 37,
-                      child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17),
-                          ),
-                          color: const Color(0xFFEBF5EE),
-                          child: Text(
-                            'Next ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Nunito-med',
-                              color: const Color(0xFF14999E),
+                        onChanged: (String y) async {},
+                        controller: nameTextField,
+                        decoration: InputDecoration(
+                          labelText: 'Name',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
                             ),
                           ),
-                          onPressed: () async {
-                            UserRegisterationModel user = new UserRegisterationModel(
-                                username: nameTextField.text,
-                                email: emailTextController.text,
-                                password1: passwordTextController.text,
-                                password2: rePasswordTextController.text,
-                                address: "manial , cairo",
-                                birthdate: "1999-02-02",
-                                gender: "male");
-                            print(1);
-                            UserRegisterationModel user2 =
-                                await addUser(body:user.toMap());
-                                
-                            print(2);
-                            if (nameTextField.text.isNotEmpty) {
-                              if (user2.username == nameTextField.text[0]) {
-                                setState(() {
-                                  usernameVerification = "null";
-                                  emailVerification = user2.email;
-                                  passwordVerififcation = user2.password1;
-                                  rePasswordVerififcation = user2.password2;
-                                });
-                              } else {
-                                setState(() {
-                                  emailVerification = user2.email;
-                                  usernameVerification = user2.username;
-                                  passwordVerififcation = user2.password1;
-                                  rePasswordVerififcation = user2.password2;
-                                });
-                              }
-                            } else {
-                              setState(() {
-                                emailVerification = user2.email;
-                                usernameVerification = user2.username;
-                                passwordVerififcation = user2.password1;
-                                rePasswordVerififcation = user2.password2;
-                              });
-                            }
-
-                            if (_formKey.currentState.validate()) {
-                              _scaffold.currentState.showSnackBar(SnackBar(
-                                content: Text('Processing Data'),
-                                duration: Duration(seconds: 1),
-                              ));
-                              //dispose();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Registerfour()),
-                              );
-                            }
-                          }),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: const Color(0xFF466365),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: TextFormField(
+                        validator: (String x) {
+                          return registrationProvider.getEmailMessage();
+                        },
+                        onChanged: (String y) async {},
+                        controller: emailTextController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: const Color(0xFF466365),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: TextFormField(
+                        validator: (String x) {
+                          return registrationProvider.getPasswordMessage();
+                        },
+                        obscureText: true,
+                        controller: passwordTextController,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: const Color(0xFF466365),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: TextFormField(
+                        obscureText: true,
+                        validator: (String x) {
+                          return registrationProvider.getRePasswordMessage();
+                        },
+                        onChanged: (String y) async {},
+                        controller: rePasswordTextController,
+                        decoration: InputDecoration(
+                          labelText: 'Repeat Password',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(errorBorderColor),
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: const Color(0xFF466365),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: m.size.height * 1 / 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.all(10),
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            })),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ButtonTheme(
+                        minWidth: 91,
+                        height: 50,
+                        child: Consumer<RegistrationProvider>(
+                          builder: (context, model, widgett) {
+                            return RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    model.getLoading()
+                                        ? Container(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              backgroundColor: Color(0xFFEE4C7D),
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            width: 0,
+                                          ),
+                                    model.getLoading()
+                                        ? SizedBox(
+                                            width: 5,
+                                          )
+                                        : SizedBox(
+                                            width: 0,
+                                          ),
+                                    Text(
+                                      model.getLoading()
+                                          ? 'Verifying data ..'
+                                          : 'Sign up',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito-med',
+                                        color: const Color(0xFFEE4C7D),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  await model.addUser(
+                                    username: nameTextField.text,
+                                    email: emailTextController.text,
+                                    password: passwordTextController.text,
+                                    rePassword: rePasswordTextController.text,
+                                  );
+                                  if (_formKey.currentState.validate()) {
+                                    Provider.of<UserProvider>(context)
+                                        .fetchUser()
+                                        .then((value) => (Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Home()))));
+                                  }
+                                });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

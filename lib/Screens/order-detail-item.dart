@@ -1,9 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/orders.dart';
-import 'package:gp_login_screen/Providers/UserProvider.dart';
-import 'package:provider/provider.dart';
-import '../Providers/cartProvider.dart';
 
 class OrderdetailItem extends StatefulWidget {
   final Item item;
@@ -48,8 +45,7 @@ class OrderdetailItemState extends State<OrderdetailItem> {
                             borderRadius: BorderRadius.circular(9)),
                         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: CachedNetworkImage(
-                          imageUrl: 'http://127.0.0.1:8000' +
-                              usingItem.productObj.image,
+                          imageUrl: usingItem.productObj.image,
                           imageBuilder: (context, imageProvider) => Container(
                             width: (55 * m.size.width) / 360,
                             height: (85 * m.size.width) / 360,

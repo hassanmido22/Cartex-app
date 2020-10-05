@@ -43,8 +43,7 @@ class SingleCartItemState extends State<SingleCartItem> {
                           borderRadius: BorderRadius.circular(9)),
                       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                       child: CachedNetworkImage(
-                        imageUrl: 'http://127.0.0.1:8000' +
-                            usingItem.productObj.image,
+                        imageUrl: usingItem.productObj.image,
                         imageBuilder: (context, imageProvider) => Container(
                           width: (55 * m.size.width) / 360,
                           height: (55 * m.size.width) / 360,
@@ -68,12 +67,15 @@ class SingleCartItemState extends State<SingleCartItem> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              usingItem.product,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color.fromRGBO(72, 67, 92, 1),
-                                fontWeight: FontWeight.w700,
+                            child: Flexible(
+                              child: Text(
+                                usingItem.product,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromRGBO(72, 67, 92, 1),
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           ),

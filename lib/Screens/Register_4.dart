@@ -216,10 +216,9 @@ class Registerfour extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => new Home()),
-                        );
+                        Navigator.of(context).pushReplacement(
+                            new MaterialPageRoute(
+                                builder: (context) => Home()));
                       },
                     ),
                   ),

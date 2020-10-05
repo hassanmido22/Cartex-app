@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gp_login_screen/Models/cart.dart';
 import '../Models/orders.dart';
@@ -8,29 +10,74 @@ import 'package:http/http.dart' as http;
 class OrderProvider with ChangeNotifier {
   bool loading = false;
   bool isEmpty = false;
+  double averagePurchase = 0;
+  Duration averageShoppingTime;
   List<Orders> orders;
   String message;
+
   getorders() async {
+    setLoading(true);
     final sp = await SharedPreferences.getInstance();
     String token = sp.getString('token');
-    final url = "http://127.0.0.1:8000/orders/orderslist/";
-    var response = await http.get(url, headers: {"Authorization": "$token"});
+    final link2 = "https://cartex-app.herokuapp.com/";
+    final url = link2 + "orders/";
+    var response = await http.get(url, headers: {'Authorization': "$token"});
     if (response.statusCode == 200) {
-      print(response.body);
-      if (ordersFromJson(response.body).length == 0) {
-        setLoading(true);
+      setList(ordersFromJson(response.body));
+      if (orders.length == 0) {
         setIsEmpty(true);
+        setAverageShoppingTime(Duration(hours: 0,minutes: 0));
       } else {
-        setLoading(true);
+        calculateAverageTotal();
+        calculateSHoppingTImeAverage();
         setIsEmpty(false);
       }
-      setList(ordersFromJson(response.body));
-      notifyListeners();
     } else {
+      setList([]);
       setIsEmpty(true);
-      setMessage("you have no orders");
-      notifyListeners();
+      setAverageShoppingTime(Duration(hours: 5,minutes: 5));
+      setMessage("You have no orders");
     }
+    setLoading(false);
+
+  }
+
+  calculateSHoppingTImeAverage() {
+    int totall = 0;
+
+    orders.forEach((f) {
+      totall = totall + (f.hours * 60) + f.minutes;
+    });
+    print(totall);
+    totall = totall ~/ orders.length;
+    print(totall);
+    setAverageShoppingTime(Duration(hours: totall ~/ 60, minutes: totall % 60));
+  }
+
+  calculateAverageTotal() {
+    double total = 0;
+    orders.forEach((f) {
+      total = total + f.total;
+    });
+    setAveragePurchase(total / orders.length);
+  }
+
+  setAveragePurchase(value) {
+    averagePurchase = value;
+    notifyListeners();
+  }
+
+  double getAveragePurchase() {
+    return averagePurchase;
+  }
+
+  setAverageShoppingTime(value) {
+    averageShoppingTime = value;
+    notifyListeners();
+  }
+
+  Duration getAverageShoppingTime() {
+    return averageShoppingTime;
   }
 
   setMessage(value) {

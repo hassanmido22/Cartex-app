@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gp_login_screen/Providers/homeProvider.dart';
 //import 'package:gp_login_screen/Providers/HomePageProvider.dart';
 //import 'package:gp_login_screen/Screens/HomePage_NoSHopping.dart';
 import 'package:provider/provider.dart';
@@ -11,25 +12,26 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homePageProvider = Provider.of<HomeProvider>(context);
     // final homePageProvider = Provider.of<HomePageProvider>(context);
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           AppBar(
+            
             automaticallyImplyLeading: false,
             elevation: 0,
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
                   child: IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
-                        /*
-                        Scaffold.of(context).openDrawer();*/
+                        Navigator.of(context).pop();
                       }),
                 ),
                 Text(
@@ -40,6 +42,13 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                       fontWeight: FontWeight.w700,
                       color: Color.fromRGBO(56, 52, 71, 1),
                       fontSize: 20),
+                ),
+                IconButton(
+                  onPressed: () {
+                    homePageProvider.setVisibility(!homePageProvider.getVisibility());
+                  },
+                  icon: Icon(Icons.search),
+                  color: Color.fromRGBO(112, 112, 112, 1),
                 ),
               ],
             ),

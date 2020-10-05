@@ -32,17 +32,27 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                     onPressed: () {
                       Scaffold.of(context).openDrawer();
                     }),
-                Text(
-                  "Main Home",
-                  style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontWeight: FontWeight.w700,
+                Row(
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      'assets/logo.svg',
                       color: Color.fromRGBO(56, 52, 71, 1),
-                      fontSize: 20),
+                      height: 30,
+                    ),
+                    Text(
+                      "Cartex",
+                      style: TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromRGBO(56, 52, 71, 1),
+                          fontSize: 20),
+                    ),
+                  ],
                 ),
                 IconButton(
                   onPressed: () {
-                    homePageProvier.setVisibility(true);
+                    homePageProvier
+                        .setVisibility(!homePageProvier.getVisibility());
                   },
                   icon: Icon(Icons.search),
                   color: Color.fromRGBO(112, 112, 112, 1),
