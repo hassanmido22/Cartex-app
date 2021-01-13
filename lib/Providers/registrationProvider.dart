@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'package:gp_login_screen/Models/RegisterationModel.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter/cupertino.dart';
-import 'package:gp_login_screen/Class/user.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationProvider with ChangeNotifier {
-  String message;
+
   bool loading = false;
   String emailMessage;
   String passwordMessage;

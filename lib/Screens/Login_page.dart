@@ -13,8 +13,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _form = GlobalKey<FormState>();
 
-  String usernameVerification = "null";
-
   final _usernameController = new TextEditingController();
   final _passwordController = new TextEditingController();
 
